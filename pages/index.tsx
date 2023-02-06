@@ -16,6 +16,7 @@ export default function Home() {
     getLostSectorData();
   }, []);
 
+  // renders the images for the current lost sector's rewards
   const renderRewards = () => {
     const rewards: ReactNode[] = lostSectorData.lostSector.rewards.map((reward: any) => {
       const { icon, name } = reward.displayProperties;
@@ -28,6 +29,7 @@ export default function Home() {
           height="48"
           key={`${reward.collectibleHash}_image`}
           title={name}
+          className="image-rounded"
         />
       );
     });
@@ -35,6 +37,8 @@ export default function Home() {
     return rewards;
   };
 
+  // renders the images for the current lost sector's modifiers
+  // ? shields and champions are filtered out since we'll represent them in the UI differently
   const renderModifiers = () => {
     const modifiers: ReactNode[] = lostSectorData.lostSector.modifiers
       .filter((modifier: any) => {
@@ -73,11 +77,27 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Destiny Lost Sector App</h1>
-
         {lostSectorData ? (
-          <div>
-            <h2>{lostSectorData.lostSector.metadata.originalDisplayProperties.name}</h2>
+          <div className="activity-card">
+            <div>
+              <div>
+                <h2>{lostSectorData.lostSector.metadata.originalDisplayProperties.name}</h2>
+                <h3>Today&apos;s Lost Sector</h3>
+              </div>
+
+              {/* TODO shields */}
+              {/* TODO champions */}
+
+              <div className="rewards-container">
+                <h4>Rewards</h4>
+                <div>{renderRewards()}</div>
+              </div>
+
+              <div className="modifiers-container">
+                <h4>Modifiers</h4>
+                <div>{renderModifiers()}</div>
+              </div>
+            </div>
 
             <Image
               placeholder="blur"
@@ -85,11 +105,8 @@ export default function Home() {
               src={`https://www.bungie.net${lostSectorData.lostSector.metadata.pgcrImage}`}
               alt={lostSectorData.lostSector.metadata.originalDisplayProperties.name}
               width="437"
-              height="245"></Image>
-
-            <div>{renderRewards()}</div>
-
-            <div>{renderModifiers()}</div>
+              height="245"
+              className="image-rounded"></Image>
           </div>
         ) : (
           <></>

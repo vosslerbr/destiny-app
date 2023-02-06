@@ -1,9 +1,9 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono",
+    "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono",
+    "Courier New", monospace;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -17,10 +17,7 @@
     #0071ff33 160deg,
     transparent 360deg
   );
-  --secondary-glow: radial-gradient(
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
+  --secondary-glow: radial-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
 
   --tile-start-rgb: 239, 245, 249;
   --tile-end-rgb: 228, 232, 233;
@@ -87,11 +84,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
     rgb(var(--background-start-rgb));
 }
 
@@ -104,4 +97,60 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+/* TODO My styles (move later) */
+.activity-card {
+  max-width: 1200px;
+  margin: auto;
+  background: rgb(26, 35, 55);
+  padding: 2rem;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity-card h2 {
+  font-size: 2rem;
+}
+
+.activity-card h3 {
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+.image-rounded {
+  border-radius: 5px;
+}
+
+.modifiers-container,
+.rewards-container {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 0;
+}
+
+.modifiers-container:last-child,
+.rewards-container:last-child {
+  margin-bottom: 0;
+}
+
+.modifiers-container h4,
+.rewards-container h4 {
+  font-weight: 400;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+}
+
+.modifiers-container img,
+.rewards-container img {
+  margin-right: 1rem;
+}
+
+.modifiers-container img:last-child,
+.rewards-container img:last-child {
+  margin-right: 0;
 }
