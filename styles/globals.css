@@ -100,9 +100,17 @@ a {
 }
 
 /* TODO My styles (move later) */
-.activity-card {
+
+body {
+  margin: 0 1rem;
+}
+
+main {
   max-width: 1200px;
-  margin: auto;
+  margin: 2rem auto;
+}
+
+.activity-card {
   background: rgb(26, 35, 55);
   padding: 2rem;
   border-radius: 5px;
@@ -126,31 +134,26 @@ a {
   border-radius: 5px;
 }
 
-.modifiers-container,
-.rewards-container {
+.activity-metadata {
   display: flex;
   flex-direction: column;
   margin: 2rem 0;
 }
 
-.modifiers-container:last-child,
-.rewards-container:last-child {
+.activity-metadata:last-child {
   margin-bottom: 0;
 }
 
-.modifiers-container h4,
-.rewards-container h4 {
+.activity-metadata h4 {
   font-weight: 400;
   opacity: 0.5;
   margin-bottom: 0.5rem;
 }
 
-.modifiers-container img,
-.rewards-container img {
+.activity-metadata img {
   margin-right: 1rem;
 }
 
-.modifiers-container img:last-child,
-.rewards-container img:last-child {
+.activity-metadata img:last-child {
   margin-right: 0;
 }

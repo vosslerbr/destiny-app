@@ -11,14 +11,14 @@
     "hash": 480864721,
     "startsAt": 1675702800,
     "endsAt": 1675789200,
-    "rewardName": "legs"
+    "rewardName": "leg"
   },
   "1675789200": {
     "name": "Extraction",
     "hash": 145221020,
     "startsAt": 1675789200,
     "endsAt": 1675875600,
-    "rewardName": "arms"
+    "rewardName": "gauntlet"
   },
   "1675875600": {
     "name": "Chamber of Starlight",
@@ -39,14 +39,14 @@
     "hash": 567131519,
     "startsAt": 1676048400,
     "endsAt": 1676134800,
-    "rewardName": "legs"
+    "rewardName": "leg"
   },
   "1676134800": {
     "name": "K1 Crew Quarters",
     "hash": 184186578,
     "startsAt": 1676134800,
     "endsAt": 1676221200,
-    "rewardName": "arms"
+    "rewardName": "gauntlet"
   },
   "1676221200": {
     "name": "K1 Revelation",
@@ -67,14 +67,14 @@
     "hash": 1648125538,
     "startsAt": 1676394000,
     "endsAt": 1676480400,
-    "rewardName": "legs"
+    "rewardName": "leg"
   },
   "1676480400": {
     "name": "Concealed Void",
     "hash": 912873274,
     "startsAt": 1676480400,
     "endsAt": 1676566800,
-    "rewardName": "arms"
+    "rewardName": "gauntlet"
   },
   "1676566800": {
     "name": "Perdition",
@@ -95,14 +95,14 @@
     "hash": 145221020,
     "startsAt": 1676739600,
     "endsAt": 1676826000,
-    "rewardName": "legs"
+    "rewardName": "leg"
   },
   "1676826000": {
     "name": "Chamber of Starlight",
     "hash": 4206916276,
     "startsAt": 1676826000,
     "endsAt": 1676912400,
-    "rewardName": "arms"
+    "rewardName": "gauntlet"
   },
   "1676912400": {
     "name": "Aphelion’s Rest",
@@ -123,14 +123,14 @@
     "hash": 184186578,
     "startsAt": 1677085200,
     "endsAt": 1677171600,
-    "rewardName": "legs"
+    "rewardName": "leg"
   },
   "1677171600": {
     "name": "K1 Revelation",
     "hash": 3911969238,
     "startsAt": 1677171600,
     "endsAt": 1677258000,
-    "rewardName": "arms"
+    "rewardName": "gauntlet"
   },
   "1677258000": {
     "name": "K1 Communion",
@@ -151,13 +151,13 @@
     "hash": 912873274,
     "startsAt": 1677430800,
     "endsAt": 1677517200,
-    "rewardName": "legs"
+    "rewardName": "leg"
   },
   "1677517200": {
     "name": "Perdition",
     "hash": 1070981425,
     "startsAt": 1677517200,
     "endsAt": 1677603600,
-    "rewardName": "arms"
+    "rewardName": "gauntlet"
   }
 }

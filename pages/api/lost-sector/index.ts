@@ -36,6 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const lostSectorHash = todaysLostSector?.hash;
   const lostSectorRewardName = todaysLostSector?.rewardName;
 
+  console.log("lostSectorHash", lostSectorHash);
+  console.log("lostSectorRewardName", lostSectorRewardName);
+
   // if we don't have a hash or reward name then we can't do anything
   if (!lostSectorHash || !lostSectorRewardName) {
     res.status(404).send("Not found");

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export default function Home() {
   const [lostSectorData, setLostSectorData] = useState<any>(null);
@@ -35,6 +35,76 @@ export default function Home() {
     });
 
     return rewards;
+  };
+
+  const renderShields = () => {
+    const shieldsObject = lostSectorData.lostSector.modifiers.find((modifier: any) => {
+      return modifier.displayProperties.name === "Shielded Foes";
+    });
+
+    const { description } = shieldsObject.displayProperties;
+
+    let regex = /\[([^\]]+)\]/g;
+    let match: RegExpExecArray | null;
+    let shieldTypes: string[] = [];
+
+    while ((match = regex.exec(description)) !== null) {
+      shieldTypes.push(match[1]);
+    }
+
+    const shields = shieldTypes.map((shieldType: string) => {
+      return (
+        <Image
+          src={`/${shieldType.toLowerCase()}.png`}
+          alt={shieldType}
+          width="48"
+          height="48"
+          key={`${shieldType}_image`}
+          title={`${shieldType}`}
+        />
+      );
+    });
+
+    return shields;
+  };
+
+  const renderChampions = () => {
+    const championsObject = lostSectorData.lostSector.modifiers.find((modifier: any) => {
+      return modifier.displayProperties.name === "Champion Foes";
+    });
+
+    const championNameMap: { [key: string]: string } = {
+      Disruption: "Overload",
+      Stagger: "Unstoppable",
+      Stun: "Barrier",
+    };
+
+    const { description } = championsObject.displayProperties;
+
+    let regex = /\[([^\]]+)\]/g;
+    let match: RegExpExecArray | null;
+    let championTypes: string[] = [];
+
+    while ((match = regex.exec(description)) !== null) {
+      championTypes.push(match[1]);
+    }
+
+    const champions = championTypes.map((championType: string) => {
+      const champName = championNameMap[championType];
+
+      return (
+        <Image
+          src={`/${champName.toLowerCase()}.png`}
+          alt={champName}
+          width="48"
+          height="48"
+          key={`${champName}_image`}
+          title={`${champName}`}
+        />
+      );
+    });
+
+    return champions;
   };
 
   // renders the images for the current lost sector's modifiers
@@ -85,15 +155,22 @@ export default function Home() {
                 <h3>Today&apos;s Lost Sector</h3>
               </div>
 
-              {/* TODO shields */}
-              {/* TODO champions */}
+              <div className="shields-container activity-metadata">
+                <h4>Shields</h4>
+                <div>{renderShields()}</div>
+              </div>
 
-              <div className="rewards-container">
+              <div className="champions-container activity-metadata">
+                <h4>Champions</h4>
+                <div>{renderChampions()}</div>
+              </div>
+
+              <div className="rewards-container activity-metadata">
                 <h4>Rewards</h4>
                 <div>{renderRewards()}</div>
               </div>
 
-              <div className="modifiers-container">
+              <div className="modifiers-container activity-metadata">
                 <h4>Modifiers</h4>
                 <div>{renderModifiers()}</div>
               </div>
@@ -106,6 +183,7 @@ export default function Home() {
               alt={lostSectorData.lostSector.metadata.originalDisplayProperties.name}
               width="437"
               height="245"
+              priority
               className="image-rounded"></Image>
           </div>
         ) : (
