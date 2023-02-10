@@ -51,11 +51,9 @@ export default function Home() {
 
             <div>
               <LSRewards rewards={lostSectorData.lostSector.rewards} />
-
-              <LSModifiers modifiers={lostSectorData.lostSector.modifiers} />
               <LSShields modifiers={lostSectorData.lostSector.modifiers} />
-
               <LSChampions modifiers={lostSectorData.lostSector.modifiers} />
+              <LSModifiers modifiers={lostSectorData.lostSector.modifiers} />
             </div>
           </div>
         )}

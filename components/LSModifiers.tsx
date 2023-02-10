@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import Image from "next/image";
 
 interface LSModifiersProps {
@@ -23,14 +24,15 @@ export default function LSModifiers({ modifiers }: LSModifiersProps) {
             const { icon, name, description } = modifier.displayProperties;
 
             return (
-              <Image
-                src={`https://www.bungie.net${icon}`}
-                alt={name}
-                width="48"
-                height="48"
-                key={`${modifier.hash}_image`}
-                title={`${name}\n\n${description}`}
-              />
+              <Tooltip title={`${name}: ${description}`} key={`${modifier.hash}_tooltip`}>
+                <Image
+                  src={`https://www.bungie.net${icon}`}
+                  alt={name}
+                  width="48"
+                  height="48"
+                  key={`${modifier.hash}_image`}
+                />
+              </Tooltip>
             );
           })}
       </div>

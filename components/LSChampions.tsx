@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import Image from "next/image";
 
 interface LSModifiersProps {
@@ -29,14 +30,15 @@ export default function LSChampions({ modifiers }: LSModifiersProps) {
     const champName = championNameMap[championType];
 
     return (
-      <Image
-        src={`/${champName.toLowerCase()}.png`}
-        alt={champName}
-        width="48"
-        height="48"
-        key={`${champName}_image`}
-        title={`${champName}`}
-      />
+      <Tooltip title={champName} key={`${champName}_tooltip`}>
+        <Image
+          src={`/${champName.toLowerCase()}.png`}
+          alt={champName}
+          width="48"
+          height="48"
+          key={`${champName}_image`}
+        />
+      </Tooltip>
     );
   });
 
