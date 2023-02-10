@@ -12,7 +12,7 @@ export default function LSChampions({ modifiers }: LSModifiersProps) {
   const championNameMap: { [key: string]: string } = {
     Disruption: "Overload",
     Stagger: "Unstoppable",
-    Stun: "Barrier",
+    "Shield-Piercing": "Barrier",
   };
 
   const { description } = championsObject.displayProperties;
@@ -26,7 +26,11 @@ export default function LSChampions({ modifiers }: LSModifiersProps) {
   }
 
   const champions = championTypes.map((championType: string) => {
+    console.log(championType);
+
     const champName = championNameMap[championType];
+
+    console.log(champName);
 
     return (
       <Image
