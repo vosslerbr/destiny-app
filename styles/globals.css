@@ -114,20 +114,25 @@ main {
   background: rgb(26, 35, 55);
   padding: 2rem;
   border-radius: 5px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 2rem;
 }
 
 .activity-card h2 {
   font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 .activity-card h3 {
   font-size: 1rem;
   font-weight: 400;
   opacity: 0.5;
+}
+
+#ls-keyart {
+  width: 100%;
+  height: auto;
 }
 
 .image-rounded {
@@ -137,7 +142,7 @@ main {
 .activity-metadata {
   display: flex;
   flex-direction: column;
-  margin: 2rem 0;
+  margin: 0 0 2rem 0;
 }
 
 .activity-metadata:last-child {
@@ -156,4 +161,34 @@ main {
 
 .activity-metadata img:last-child {
   margin-right: 0;
+}
+
+@media screen and (max-width: 890px) {
+  body {
+    margin: 0 0.5rem;
+  }
+
+  main {
+    margin: 1rem auto;
+  }
+
+  .activity-card {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .activity-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .activity-metadata img {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.75rem;
+  }
+
+  .activity-metadata {
+    margin-bottom: 1rem;
+  }
 }
