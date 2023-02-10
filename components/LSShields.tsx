@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import Image from "next/image";
 
 interface LSModifiersProps {
@@ -21,14 +22,15 @@ export default function LSShields({ modifiers }: LSModifiersProps) {
 
   const shields = shieldTypes.map((shieldType: string) => {
     return (
-      <Image
-        src={`/${shieldType.toLowerCase()}.png`}
-        alt={shieldType}
-        width="48"
-        height="48"
-        key={`${shieldType}_image`}
-        title={`${shieldType}`}
-      />
+      <Tooltip title={shieldType} key={`${shieldType}_tooltip`}>
+        <Image
+          src={`/${shieldType.toLowerCase()}.png`}
+          alt={shieldType}
+          width="48"
+          height="48"
+          key={`${shieldType}_image`}
+        />
+      </Tooltip>
     );
   });
 
