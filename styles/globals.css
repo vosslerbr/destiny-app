@@ -159,6 +159,21 @@ main {
   margin-right: 1rem;
 }
 
+.reward-image {
+  cursor: pointer;
+}
+
+.modal-image-container {
+  width: 400px;
+  height: 225px;
+  border-radius: 5px;
+}
+
+.modal-image-container img {
+  position: relative !important;
+  border-radius: 5px;
+}
+
 .activity-metadata img:last-child {
   margin-right: 0;
 }

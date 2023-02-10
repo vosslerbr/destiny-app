@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const pathsToWriteToDisk = [
     "DestinyActivityDefinition",
     "DestinyActivityModifierDefinition",
-    "DestinyInventoryItemLiteDefinition",
+    "DestinyInventoryItemDefinition", // TODO this leaves out info we need, remove the lite
   ];
 
   for (const path of pathsToWriteToDisk) {
@@ -89,7 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       continue;
     }
 
-    if (path === "DestinyInventoryItemLiteDefinition") {
+    if (path === "DestinyInventoryItemDefinition") {
       const armorTypes = [
         "Exotic Leg Armor",
         "Exotic Gauntlets",

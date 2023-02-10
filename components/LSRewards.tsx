@@ -36,7 +36,7 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
                 width="48"
                 height="48"
                 key={`${reward.collectibleHash}_image`}
-                className="image-rounded"
+                className="image-rounded reward-image"
                 onClick={() => {
                   setModalContent(reward);
                   setModalOpen(true);
@@ -53,13 +53,17 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
             <p>
               {classTypeMap[modalContent.classType]} {modalContent.itemTypeAndTierDisplayName}
             </p>
-            <Image
-              src={`https://www.bungie.net${modalContent.displayProperties.icon}`}
-              alt={modalContent.displayProperties.name}
-              width="96"
-              height="96"
-              className="image-rounded"
-            />
+
+            <div className="modal-image-container">
+              <Image
+                src={`https://www.bungie.net${modalContent.screenshot}`}
+                alt={modalContent.displayProperties.name}
+                fill={true}
+                style={{
+                  objectFit: "contain",
+                }}
+              />
+            </div>
           </DialogContent>
         </Dialog>
       )}
