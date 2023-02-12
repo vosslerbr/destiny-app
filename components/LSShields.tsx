@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import Image from "next/image";
 
 interface LSModifiersProps {
@@ -6,10 +7,10 @@ interface LSModifiersProps {
 
 export default function LSShields({ modifiers }: LSModifiersProps) {
   const shieldsObject = modifiers.find((modifier: any) => {
-    return modifier.displayProperties.name === "Shielded Foes";
+    return modifier.name === "Shielded Foes";
   });
 
-  const { description } = shieldsObject.displayProperties;
+  const { description } = shieldsObject;
 
   let regex = /\[([^\]]+)\]/g;
   let match: RegExpExecArray | null;
@@ -21,14 +22,15 @@ export default function LSShields({ modifiers }: LSModifiersProps) {
 
   const shields = shieldTypes.map((shieldType: string) => {
     return (
-      <Image
-        src={`/${shieldType.toLowerCase()}.png`}
-        alt={shieldType}
-        width="48"
-        height="48"
-        key={`${shieldType}_image`}
-        title={`${shieldType}`}
-      />
+      <Tooltip title={shieldType} key={`${shieldType}_tooltip`}>
+        <Image
+          src={`/${shieldType.toLowerCase()}.png`}
+          alt={shieldType}
+          width="48"
+          height="48"
+          key={`${shieldType}_image`}
+        />
+      </Tooltip>
     );
   });
 

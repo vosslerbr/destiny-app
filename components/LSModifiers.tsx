@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import Image from "next/image";
 
 interface LSModifiersProps {
@@ -12,7 +13,7 @@ export default function LSModifiers({ modifiers }: LSModifiersProps) {
         {modifiers
           .filter((modifier: any) => {
             // Filter out the "Shielded Foes" and "Champion Foes" modifiers as well as any modifiers without an icon
-            const { name, icon } = modifier.displayProperties;
+            const { name, icon } = modifier;
 
             const notShieldedFoes = name !== "Shielded Foes";
             const notChampionFoes = name !== "Champion Foes";
@@ -20,17 +21,18 @@ export default function LSModifiers({ modifiers }: LSModifiersProps) {
             return icon && notShieldedFoes && notChampionFoes;
           })
           .map((modifier: any) => {
-            const { icon, name, description } = modifier.displayProperties;
+            const { icon, name, description } = modifier;
 
             return (
-              <Image
-                src={`https://www.bungie.net${icon}`}
-                alt={name}
-                width="48"
-                height="48"
-                key={`${modifier.hash}_image`}
-                title={`${name}\n\n${description}`}
-              />
+              <Tooltip title={`${name}: ${description}`} key={`${modifier.name}_tooltip`}>
+                <Image
+                  src={`https://www.bungie.net${icon}`}
+                  alt={name}
+                  width="48"
+                  height="48"
+                  key={`${modifier.name}_image`}
+                />
+              </Tooltip>
             );
           })}
       </div>

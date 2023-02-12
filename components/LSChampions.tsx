@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import Image from "next/image";
 
 interface LSModifiersProps {
@@ -6,16 +7,16 @@ interface LSModifiersProps {
 
 export default function LSChampions({ modifiers }: LSModifiersProps) {
   const championsObject = modifiers.find((modifier: any) => {
-    return modifier.displayProperties.name === "Champion Foes";
+    return modifier.name === "Champion Foes";
   });
 
   const championNameMap: { [key: string]: string } = {
     Disruption: "Overload",
     Stagger: "Unstoppable",
-    Stun: "Barrier",
+    "Shield-Piercing": "Barrier",
   };
 
-  const { description } = championsObject.displayProperties;
+  const { description } = championsObject;
 
   let regex = /\[([^\]]+)\]/g;
   let match: RegExpExecArray | null;
@@ -26,17 +27,22 @@ export default function LSChampions({ modifiers }: LSModifiersProps) {
   }
 
   const champions = championTypes.map((championType: string) => {
+    console.log(championType);
+
     const champName = championNameMap[championType];
 
+    console.log(champName);
+
     return (
-      <Image
-        src={`/${champName.toLowerCase()}.png`}
-        alt={champName}
-        width="48"
-        height="48"
-        key={`${champName}_image`}
-        title={`${champName}`}
-      />
+      <Tooltip title={champName} key={`${champName}_tooltip`}>
+        <Image
+          src={`/${champName.toLowerCase()}.png`}
+          alt={champName}
+          width="48"
+          height="48"
+          key={`${champName}_image`}
+        />
+      </Tooltip>
     );
   });
 

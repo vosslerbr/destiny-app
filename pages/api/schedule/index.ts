@@ -9,7 +9,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const armorOrder = ["helmet", "legs", "gauntlet", "chest"];
+  const armorOrder = [
+    "Exotic Helmet",
+    "Exotic Leg Armor",
+    "Exotic Gauntlets",
+    "Exotic Chest Armor",
+  ];
 
   const lostSectorOrder = fs.readFileSync(process.cwd() + "/json/LostSectorOrder.json", "utf8");
 
