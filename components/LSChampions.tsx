@@ -7,7 +7,7 @@ interface LSModifiersProps {
 
 export default function LSChampions({ modifiers }: LSModifiersProps) {
   const championsObject = modifiers.find((modifier: any) => {
-    return modifier.displayProperties.name === "Champion Foes";
+    return modifier.name === "Champion Foes";
   });
 
   const championNameMap: { [key: string]: string } = {
@@ -16,7 +16,7 @@ export default function LSChampions({ modifiers }: LSModifiersProps) {
     "Shield-Piercing": "Barrier",
   };
 
-  const { description } = championsObject.displayProperties;
+  const { description } = championsObject;
 
   let regex = /\[([^\]]+)\]/g;
   let match: RegExpExecArray | null;

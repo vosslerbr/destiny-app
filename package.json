@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@d2api/manifest-node": "^2.0.4",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.11.8",

@@ -2,20 +2,27 @@ import LSChampions from "@/components/LSChampions";
 import LSModifiers from "@/components/LSModifiers";
 import LSRewards from "@/components/LSRewards";
 import LSShields from "@/components/LSShields";
+import { LostSectorData } from "@/global";
+import { CircularProgress } from "@mui/material";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [lostSectorData, setLostSectorData] = useState<any>(null);
+  const [lostSectorData, setLostSectorData] = useState<LostSectorData | null>(null);
 
   useEffect(() => {
     // TODO try catch?
+
+    console.log("Does this run twice?");
+
     const getLostSectorData = async () => {
       const res = await fetch("/api/lost-sector");
       const data = await res.json();
 
-      setLostSectorData(data);
+      const lsData: LostSectorData = data.lostSector;
+
+      setLostSectorData(lsData);
     };
 
     getLostSectorData();
@@ -30,18 +37,18 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {lostSectorData && (
+        {lostSectorData ? (
           <div className="activity-card">
             <div>
               <div>
                 <h3>Today&apos;s Lost Sector is</h3>
-                <h2>{lostSectorData.lostSector.metadata.originalDisplayProperties.name}</h2>
+                <h2>{lostSectorData.name}</h2>
               </div>
               <Image
                 placeholder="blur"
-                blurDataURL={`https://www.bungie.net${lostSectorData.lostSector.metadata.pgcrImage}`}
-                src={`https://www.bungie.net${lostSectorData.lostSector.metadata.pgcrImage}`}
-                alt={lostSectorData.lostSector.metadata.originalDisplayProperties.name}
+                blurDataURL={`https://www.bungie.net${lostSectorData.keyArt}`}
+                src={`https://www.bungie.net${lostSectorData.keyArt}`}
+                alt={lostSectorData.name}
                 width="437"
                 height="245"
                 priority
@@ -50,12 +57,15 @@ export default function Home() {
             </div>
 
             <div>
-              <LSRewards rewards={lostSectorData.lostSector.rewards} />
-              <LSShields modifiers={lostSectorData.lostSector.modifiers} />
-              <LSChampions modifiers={lostSectorData.lostSector.modifiers} />
-              <LSModifiers modifiers={lostSectorData.lostSector.modifiers} />
+              <LSRewards rewards={lostSectorData.rewards} />
+              <LSShields modifiers={lostSectorData.modifiers} />
+              <LSChampions modifiers={lostSectorData.modifiers} />
+              <LSModifiers modifiers={lostSectorData.modifiers} />
             </div>
           </div>
+        ) : (
+          // TODO loading component
+          <CircularProgress />
         )}
       </main>
     </>

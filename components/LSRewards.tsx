@@ -6,12 +6,6 @@ interface LSRewardsProps {
   rewards: any[];
 }
 
-const classTypeMap: { [key: number]: string } = {
-  0: "Titan",
-  1: "Hunter",
-  2: "Warlock",
-};
-
 export default function LSRewards({ rewards }: LSRewardsProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<any>(null);
@@ -26,16 +20,16 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
       <h4>Rewards</h4>
       <div>
         {rewards.map((reward) => {
-          const { icon, name } = reward.displayProperties;
+          const { icon, name } = reward;
 
           return (
-            <Tooltip title={name} key={`${reward.collectibleHash}_tooltip`}>
+            <Tooltip title={name} key={`${reward.name}_tooltip`}>
               <Image
                 src={`https://www.bungie.net${icon}`}
                 alt={name}
                 width="48"
                 height="48"
-                key={`${reward.collectibleHash}_image`}
+                key={`${reward.name}_image`}
                 className="image-rounded reward-image"
                 onClick={() => {
                   setModalContent(reward);
@@ -48,16 +42,17 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
       </div>
       {modalContent && (
         <Dialog open={modalOpen} onClose={handleClose}>
-          <DialogTitle>{modalContent.displayProperties.name}</DialogTitle>
+          <DialogTitle>{modalContent.name}</DialogTitle>
           <DialogContent>
             <p>
-              {classTypeMap[modalContent.classType]} {modalContent.itemTypeAndTierDisplayName}
+              {modalContent.classType} {modalContent.itemType}
             </p>
 
             <div className="modal-image-container">
               <Image
                 src={`https://www.bungie.net${modalContent.screenshot}`}
-                alt={modalContent.displayProperties.name}
+                blurDataURL={`https://www.bungie.net${modalContent.screenshot}`}
+                alt={modalContent.name}
                 fill={true}
                 style={{
                   objectFit: "contain",
