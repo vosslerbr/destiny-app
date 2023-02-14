@@ -27,11 +27,7 @@ export default function LSChampions({ modifiers }: LSModifiersProps) {
   }
 
   const champions = championTypes.map((championType: string) => {
-    console.log(championType);
-
     const champName = championNameMap[championType];
-
-    console.log(champName);
 
     return (
       <Tooltip title={champName} key={`${champName}_tooltip`}>

@@ -3,18 +3,17 @@ import LSModifiers from "@/components/LSModifiers";
 import LSRewards from "@/components/LSRewards";
 import LSShields from "@/components/LSShields";
 import { LostSectorData } from "@/global";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Tooltip } from "@mui/material";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [lostSectorData, setLostSectorData] = useState<LostSectorData | null>(null);
+  const [xurData, setXurData] = useState<any>(null);
 
   useEffect(() => {
     // TODO try catch?
-
-    console.log("Does this run twice?");
 
     const getLostSectorData = async () => {
       const res = await fetch("/api/lost-sector");
@@ -25,7 +24,15 @@ export default function Home() {
       setLostSectorData(lsData);
     };
 
+    const getXurData = async () => {
+      const res = await fetch("/api/xur");
+      const data = await res.json();
+
+      setXurData(data);
+    };
+
     getLostSectorData();
+    getXurData();
   }, []);
 
   return (
@@ -61,6 +68,36 @@ export default function Home() {
               <LSShields modifiers={lostSectorData.modifiers} />
               <LSChampions modifiers={lostSectorData.modifiers} />
               <LSModifiers modifiers={lostSectorData.modifiers} />
+            </div>
+          </div>
+        ) : (
+          // TODO loading component
+          <CircularProgress />
+        )}
+
+        {xurData ? (
+          <div className="activity-card">
+            <div>
+              <div>
+                <h3>Xur</h3>
+              </div>
+            </div>
+
+            <div>
+              {xurData.items.map((item: any) => {
+                return (
+                  <div key={item.name}>
+                    <Tooltip title={item.name}>
+                      <Image
+                        src={`https://www.bungie.net${item.icon}`}
+                        alt={item.name}
+                        width="48"
+                        height="48"
+                      />
+                    </Tooltip>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ) : (

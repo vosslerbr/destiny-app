@@ -1,4 +1,11 @@
-import { getInventoryItem, includeTables, load, setApiKey, verbose } from "@d2api/manifest-node";
+import {
+  getInventoryItem,
+  getStat,
+  includeTables,
+  load,
+  setApiKey,
+  verbose,
+} from "@d2api/manifest-node";
 import type { NextApiRequest, NextApiResponse } from "next";
 // import fs from "fs";
 
@@ -13,7 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   verbose(); // make the client chatty. if you want.
   setApiKey(process.env.BUNGIE_API_KEY!);
-  includeTables(["InventoryItem"]);
+  includeTables(["Vendor", "InventoryItem", "Stat"]);
 
   await load();
 
@@ -32,9 +39,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const xurResJson = await xurResponse.json();
 
-  const xurSales = xurResJson.Response.sales.data[2190858386].saleItems;
+  const xurSales = xurResJson.Response.sales.data[2190858386].saleItems; // The items Xur is selling
 
   const items = [];
+  const unformattedItems = [];
 
   const xurSaleKEYS = Object.keys(xurSales);
 
@@ -43,12 +51,44 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const itemHash = item.itemHash;
 
-    // if you made it to this comment, the manifest is ready for use!
+    const inventoryItem = getInventoryItem(itemHash);
 
-    const res = getInventoryItem(itemHash);
+    if (!inventoryItem || !inventoryItem.stats) continue;
 
-    items.push(res);
+    const formattedItem: {
+      name: string;
+      description: string;
+      icon: string;
+      screenshot: string;
+      itemTypeAndTier: string;
+      stats: any[];
+    } = {
+      name: inventoryItem.displayProperties.name,
+      description: inventoryItem.displayProperties.description,
+      icon: inventoryItem.displayProperties.icon,
+      screenshot: inventoryItem.screenshot,
+      itemTypeAndTier: inventoryItem.itemTypeAndTierDisplayName,
+      stats: [],
+    };
+
+    const statHashes = Object.keys(inventoryItem.stats.stats);
+
+    for (const hash of statHashes) {
+      if (!hash) continue;
+
+      const statName = getStat(hash);
+
+      const statObj = {
+        name: statName?.displayProperties.name,
+        value: inventoryItem.stats.stats[parseInt(hash)].value,
+      };
+
+      formattedItem.stats.push(statObj);
+    }
+
+    items.push(formattedItem);
+    unformattedItems.push(inventoryItem);
   }
 
-  res.status(200).json({ xurSales, items });
+  res.status(200).json({ xurSales, items, unformattedItems });
 }
