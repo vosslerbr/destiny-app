@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [lostSectorData, setLostSectorData] = useState<LostSectorData | null>(null);
+
+  const [xurIsHere, setXurIsHere] = useState<boolean>(false);
   const [xurData, setXurData] = useState<any>(null);
 
   useEffect(() => {
@@ -32,6 +34,10 @@ export default function Home() {
     };
 
     getLostSectorData();
+
+    // TODO xur is only around from Friday reset to Tuesday reset
+    setXurIsHere(true);
+
     getXurData();
   }, []);
 
@@ -75,29 +81,30 @@ export default function Home() {
           <CircularProgress />
         )}
 
-        {xurData ? (
+        {xurData && xurIsHere ? (
           <div className="activity-card">
             <div>
               <div>
-                <h3>Xur</h3>
+                <h2>Xur</h2>
               </div>
             </div>
 
-            <div>
-              {xurData.items.map((item: any) => {
-                return (
-                  <div key={item.name}>
-                    <Tooltip title={item.name}>
+            <div className="activity-metadata">
+              <div>
+                {xurData.items.map((item: any) => {
+                  return (
+                    <Tooltip title={item.name} key={item.name}>
                       <Image
                         src={`https://www.bungie.net${item.icon}`}
                         alt={item.name}
                         width="48"
                         height="48"
+                        className="image-rounded"
                       />
                     </Tooltip>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         ) : (
