@@ -8,12 +8,16 @@ import dayjs from "dayjs";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 export default function Home() {
   const [lostSectorData, setLostSectorData] = useState<LostSectorData | null>(null);
 
   const [xurIsHere, setXurIsHere] = useState<boolean>(false);
   const [xurData, setXurData] = useState<any>(null);
+  const [xurArrival, setXurArrival] = useState<string>("");
 
   useEffect(() => {
     // TODO try catch?
@@ -36,39 +40,47 @@ export default function Home() {
 
     getLostSectorData();
 
-    // TODO xur is only around from Friday reset (11am CST) to Tuesday reset (11am CST)
-    const now = dayjs().unix();
+    // xur is only around from Friday reset to Tuesday reset
+    const now = dayjs.utc();
 
     const friday = 5;
-    const saturday = 6;
-    const sunday = 0;
-    const monday = 1;
     const tuesday = 2;
 
-    const weekend = [saturday, sunday, monday];
+    // reset is 17:00 UTC
+    const fridayReset = dayjs.utc().set("day", friday).hour(17).minute(0).second(0);
+    const tuesdayReset = dayjs.utc().set("day", tuesday).hour(17).minute(0).second(0);
 
-    // if Friday, check if it's after 11am CST
-    if (dayjs().day() === friday) {
-      const fridayReset = dayjs().hour(11).minute(0).second(0).unix();
-      if (now > fridayReset) {
-        setXurIsHere(true);
-      }
-    }
-
-    // if Saturday, time doesn't matter
-    if (weekend.includes(dayjs().day())) {
+    // if now is after friday reset and before tuesday reset, xur is here
+    if (dayjs(now).isAfter(fridayReset) && dayjs(now).isBefore(tuesdayReset)) {
       setXurIsHere(true);
+      getXurData();
     }
 
-    // if Monday, check if it's before 11am CST
-    if (dayjs().day() === tuesday) {
-      const tuesdayReset = dayjs().hour(11).minute(0).second(0).unix();
-      if (now < tuesdayReset) {
-        setXurIsHere(true);
-      }
-    }
+    const interval = setInterval(() => {
+      const diffInDays = dayjs
+        .utc()
+        .set("day", 5)
+        .hour(17)
+        .minute(0)
+        .second(0)
+        .diff(dayjs.utc(), "days", true);
 
-    getXurData();
+      const days = Math.floor(diffInDays);
+      const hours = Math.floor((diffInDays - days) * 24);
+      const minutes = Math.floor(((diffInDays - days) * 24 - hours) * 60);
+      const seconds = Math.floor((((diffInDays - days) * 24 - hours) * 60 - minutes) * 60);
+
+      const daysPlural = days === 1 ? "" : "s";
+      const hoursPlural = hours === 1 ? "" : "s";
+      const minutesPlural = minutes === 1 ? "" : "s";
+      const secondsPlural = seconds === 1 ? "" : "s";
+
+      const time = `${days} day${daysPlural}, ${hours} hour${hoursPlural}, ${minutes} minute${minutesPlural}, ${seconds} second${secondsPlural}`;
+
+      setXurArrival(time);
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -112,12 +124,9 @@ export default function Home() {
         )}
 
         {!xurIsHere ? (
-          <div className="activity-card">
-            <div>
-              <div>
-                <h2>Xur will be back in: TIME HERE</h2>
-              </div>
-            </div>
+          <div className="xur-card">
+            <h2>Xur will be back at 17:00 UTC on Friday</h2>
+            <h3>{xurArrival} from now</h3>
           </div>
         ) : xurData && xurIsHere ? (
           <div className="activity-card">
