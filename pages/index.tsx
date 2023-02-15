@@ -4,6 +4,7 @@ import LSRewards from "@/components/LSRewards";
 import LSShields from "@/components/LSShields";
 import { LostSectorData } from "@/global";
 import { CircularProgress, Tooltip } from "@mui/material";
+import dayjs from "dayjs";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -35,8 +36,37 @@ export default function Home() {
 
     getLostSectorData();
 
-    // TODO xur is only around from Friday reset to Tuesday reset
-    setXurIsHere(true);
+    // TODO xur is only around from Friday reset (11am CST) to Tuesday reset (11am CST)
+    const now = dayjs().unix();
+
+    const friday = 5;
+    const saturday = 6;
+    const sunday = 0;
+    const monday = 1;
+    const tuesday = 2;
+
+    const weekend = [saturday, sunday, monday];
+
+    // if Friday, check if it's after 11am CST
+    if (dayjs().day() === friday) {
+      const fridayReset = dayjs().hour(11).minute(0).second(0).unix();
+      if (now > fridayReset) {
+        setXurIsHere(true);
+      }
+    }
+
+    // if Saturday, time doesn't matter
+    if (weekend.includes(dayjs().day())) {
+      setXurIsHere(true);
+    }
+
+    // if Monday, check if it's before 11am CST
+    if (dayjs().day() === tuesday) {
+      const tuesdayReset = dayjs().hour(11).minute(0).second(0).unix();
+      if (now < tuesdayReset) {
+        setXurIsHere(true);
+      }
+    }
 
     getXurData();
   }, []);
@@ -81,7 +111,15 @@ export default function Home() {
           <CircularProgress />
         )}
 
-        {xurData && xurIsHere ? (
+        {!xurIsHere ? (
+          <div className="activity-card">
+            <div>
+              <div>
+                <h2>Xur will be back in: TIME HERE</h2>
+              </div>
+            </div>
+          </div>
+        ) : xurData && xurIsHere ? (
           <div className="activity-card">
             <div>
               <div>
