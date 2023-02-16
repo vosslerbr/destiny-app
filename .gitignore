@@ -20,6 +20,7 @@
 *.pem
 /manifests/*
 !/manifests/.gitkeep
+!/manifests/test.ts
 
 # debug
 npm-debug.log*
