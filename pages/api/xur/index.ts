@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   setApiKey(process.env.BUNGIE_API_KEY!);
   includeTables(["Vendor", "InventoryItem", "Stat"]);
 
-  setManifestsPath(path.join(process.cwd(), "manifests"));
+  setManifestsPath(path.join(process.cwd(), "tmp", "manifests"));
 
   await load();
 
