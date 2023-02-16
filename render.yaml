@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: next-js
+    env: node
+    plan: free
+    buildCommand: yarn; yarn build
+    startCommand: yarn start
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
