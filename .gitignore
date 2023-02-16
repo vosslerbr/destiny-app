@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 tmp/manifests/*
+!/tmp/manifests/test.ts
 
 # debug
 npm-debug.log*
