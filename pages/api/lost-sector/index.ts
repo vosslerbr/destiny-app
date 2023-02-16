@@ -9,7 +9,7 @@ import {
   includeTables,
   load,
   setApiKey,
-  setManifestsPath,
+
   verbose,
 } from "@d2api/manifest-node";
 
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   setApiKey(process.env.BUNGIE_API_KEY!);
   includeTables(["ActivityModifier", "Activity", "Collectible", "InventoryItem"]);
 
-  setManifestsPath("/tmp/manifests");
+
 
   await load();
 

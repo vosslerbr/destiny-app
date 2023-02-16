@@ -4,7 +4,6 @@ import {
   includeTables,
   load,
   setApiKey,
-  setManifestsPath,
   verbose,
 } from "@d2api/manifest-node";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -23,8 +22,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   verbose(); // make the client chatty. if you want.
   setApiKey(process.env.BUNGIE_API_KEY!);
   includeTables(["Vendor", "InventoryItem", "Stat"]);
-
-  setManifestsPath("/tmp/manifests");
 
   await load();
 

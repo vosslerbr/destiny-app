@@ -18,8 +18,8 @@
 # misc
 .DS_Store
 *.pem
-tmp/manifests/*
-!/tmp/manifests/test.ts
+/manifests/*
+!/manifests/.gitkeep
 
 # debug
 npm-debug.log*
