@@ -12,7 +12,6 @@ import {
   setManifestsPath,
   verbose,
 } from "@d2api/manifest-node";
-import path from "path";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -25,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   setApiKey(process.env.BUNGIE_API_KEY!);
   includeTables(["ActivityModifier", "Activity", "Collectible", "InventoryItem"]);
 
-  setManifestsPath(path.join(process.cwd(), "tmp", "manifests"));
+  setManifestsPath("/tmp/manifests");
 
   await load();
 

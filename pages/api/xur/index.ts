@@ -8,7 +8,7 @@ import {
   verbose,
 } from "@d2api/manifest-node";
 import type { NextApiRequest, NextApiResponse } from "next";
-import path from "path";
+
 // import fs from "fs";
 
 // This is how we keep some of the data we need up to date
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   setApiKey(process.env.BUNGIE_API_KEY!);
   includeTables(["Vendor", "InventoryItem", "Stat"]);
 
-  setManifestsPath(path.join(process.cwd(), "tmp", "manifests"));
+  setManifestsPath("/tmp/manifests");
 
   await load();
 
