@@ -1,3 +1,4 @@
+import classTypeMap from "@/helpers/classTypeMap";
 import { Dialog, DialogContent, DialogTitle, Tooltip } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
@@ -20,7 +21,7 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
       <h4>Rewards</h4>
       <div>
         {rewards.map((reward) => {
-          const { icon, name } = reward;
+          const { icon, name } = reward.inventoryItem;
 
           return (
             <Tooltip title={name} key={`${reward.name}_tooltip`}>
@@ -42,17 +43,18 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
       </div>
       {modalContent && (
         <Dialog open={modalOpen} onClose={handleClose}>
-          <DialogTitle>{modalContent.name}</DialogTitle>
+          <DialogTitle>{modalContent.inventoryItem.name}</DialogTitle>
           <DialogContent>
             <p>
-              {modalContent.classType} {modalContent.itemType}
+              {classTypeMap[modalContent.inventoryItem.classType]}{" "}
+              {modalContent.inventoryItem.itemTypeAndTierDisplayName}
             </p>
 
             <div className="modal-image-container">
               <Image
-                src={`https://www.bungie.net${modalContent.screenshot}`}
-                blurDataURL={`https://www.bungie.net${modalContent.screenshot}`}
-                alt={modalContent.name}
+                src={`https://www.bungie.net${modalContent.inventoryItem.screenshot}`}
+                blurDataURL={`https://www.bungie.net${modalContent.inventoryItem.screenshot}`}
+                alt={modalContent.inventoryItem.name}
                 fill={true}
                 style={{
                   objectFit: "contain",

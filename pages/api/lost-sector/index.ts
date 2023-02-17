@@ -1,17 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dayjs from "dayjs";
 import fs from "fs";
-import classTypeMap from "@/helpers/classTypeMap";
-import { LostSectorScheduleDay, RewardsData } from "@/global";
-import {
-  getActivityModifier,
-  getAll,
-  includeTables,
-  load,
-  setApiKey,
-
-  verbose,
-} from "@d2api/manifest-node";
+import { LostSectorScheduleDay } from "@/global";
+import prisma from "@/lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -19,14 +10,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return;
   }
-
-  verbose(); // make the client chatty. if you want.
-  setApiKey(process.env.BUNGIE_API_KEY!);
-  includeTables(["ActivityModifier", "Activity", "Collectible", "InventoryItem"]);
-
-
-
-  await load();
 
   const nowTimestamp = dayjs().unix();
 
@@ -44,9 +27,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     (lostSector) => lostSector.startsAt <= nowTimestamp && lostSector.endsAt >= nowTimestamp
   );
 
+  if (!todaysLostSector) {
+    res.status(500).send("Lost sector data not found");
+
+    return;
+  }
+
   // get the hash and reward name
-  const lostSectorHash = todaysLostSector?.hash;
-  const lostSectorRewardName = todaysLostSector?.rewardName;
+  const lostSectorHash = todaysLostSector.hash;
+  const lostSectorRewardName = todaysLostSector.rewardName;
 
   // if we don't have a hash or reward name then we can't do anything
   if (!lostSectorHash || !lostSectorRewardName) {
@@ -57,62 +46,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const lostSectorSourceHash = 2203185162;
 
-  const armorTypes = [
-    "Exotic Leg Armor",
-    "Exotic Gauntlets",
-    "Exotic Chest Armor",
-    "Exotic Helmet",
-  ];
-
-  // Collectibles allow us to get what drops from the LS, and they reference an actual InventoryItem
-  const collectibles = getAll("Collectible");
-
-  // remove any collectibles that don't drop from a lost sector
-  const lostSectorCollectibles = collectibles.filter((collectible) => {
-    return collectible.sourceHash === lostSectorSourceHash;
+  // Collectibles allow us to get what drops from the LS, and they relate to an InventoryItems
+  const lostSectorCollectibles = await prisma.collectible.findMany({
+    where: {
+      sourceHash: lostSectorSourceHash,
+      inventoryItem: {
+        is: {
+          itemTypeAndTierDisplayName: lostSectorRewardName,
+        },
+      },
+    },
+    include: {
+      inventoryItem: true,
+    },
   });
 
-  // get all the hashes for the collectibles
-  const collectibleHashes = lostSectorCollectibles.map((collectible) => {
-    return collectible.hash;
-  });
-
-  const inventoryItems = getAll("InventoryItem");
-
-  // filter the inventory items to only include the ones that are today's reward, are the correct armor type, and are an LS collectible
-  const rewards: RewardsData[] = inventoryItems.reduce((acc: RewardsData[], item) => {
-    const { itemTypeAndTierDisplayName, collectibleHash } = item;
-
-    const isCorrectArmorType = armorTypes.includes(itemTypeAndTierDisplayName);
-
-    const isLSCollectible = collectibleHash && collectibleHashes.includes(collectibleHash);
-
-    const isTodaysReward = itemTypeAndTierDisplayName === lostSectorRewardName;
-
-    if (isTodaysReward && isCorrectArmorType && isLSCollectible) {
-      acc.push({
-        name: item.displayProperties.name,
-        icon: item.displayProperties.icon,
-        screenshot: item.screenshot,
-        itemType: item.itemTypeAndTierDisplayName,
-        classType: classTypeMap[item.classType],
-      });
-    }
-
-    return acc;
-  }, []);
-
-  // find the lost sector activity definition data by hash
-  const activities = getAll("Activity");
-
-  const lostSectorActivityMode = 87;
-
-  const lostSectors = activities.filter((activity) => {
-    return activity.directActivityModeType === lostSectorActivityMode;
-  });
-
-  const lostSectorActivity = lostSectors.find((lostSector) => {
-    return lostSector.hash === lostSectorHash;
+  // find the lost sector activity definition data
+  const lostSectorActivity = await prisma.activity.findUnique({
+    where: {
+      hash: lostSectorHash,
+    },
+    include: {
+      modifiers: {
+        include: {
+          activityModifier: true,
+        },
+      },
+    },
   });
 
   if (!lostSectorActivity) {
@@ -120,26 +80,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  // get the modifiers for the lost sector
-  const modifiers: { activityModifierHash: number }[] = lostSectorActivity.modifiers;
-
-  const modifierData = modifiers.map((modifier) => {
-    const modifierHash = modifier.activityModifierHash;
-
-    const modifierData = getActivityModifier(modifierHash);
-
-    return {
-      name: modifierData?.displayProperties?.name,
-      description: modifierData?.displayProperties?.description,
-      icon: modifierData?.displayProperties?.icon,
-    };
-  });
-
   const lostSectorData = {
-    name: lostSectorActivity.originalDisplayProperties.name,
+    name: lostSectorActivity.name,
     keyArt: lostSectorActivity.pgcrImage,
-    modifiers: modifierData,
-    rewards,
+    modifiers: lostSectorActivity.modifiers,
+    rewards: lostSectorCollectibles,
   };
 
   // return the data
