@@ -22,6 +22,9 @@ export default function Home() {
   useEffect(() => {
     // TODO try catch?
 
+    setXurIsHere(false);
+    setXurData(null);
+
     const getLostSectorData = async () => {
       const res = await fetch("/api/lost-sector");
       const data = await res.json();
