@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Manifest {
+  id Int @id @default(autoincrement())
+  version String
+}
+
+model ActivityDefinition {
+  hash BigInt @id
+  data Json @default("{}")
+}
+
+model ActivityModifierDefinition {
+  hash BigInt @id
+  data Json @default("{}")
+}
+
+model ClassDefinition {
+  hash Int @id @db.UnsignedInt
+  redacted Boolean @default(false)
+  classType Int
+  blacklisted Boolean @default(false)
+  description String
+  name String
+  icon String
+  hasIcon Boolean
+  highResIcon String
+}
+
+
+model CollectibleDefinition {
+  hash BigInt @id
+  data Json @default("{}")
+}
+
+model VendorDefinition {
+  hash BigInt @id
+  data Json @default("{}")
+}
+
+model StatDefinition {
+  hash BigInt @id
+  data Json @default("{}")
+}
+
+model InventoryItemDefinition {
+  hash BigInt @id
+  data Json @default("{}")
+}
