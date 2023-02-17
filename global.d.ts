@@ -1,3 +1,5 @@
+import { ActivityModifier } from "@prisma/client";
+
 export interface ClassTypeMap {
   [key: number]: string;
 }
@@ -27,6 +29,6 @@ export interface ModifiersData {
 export interface LostSectorData {
   name: string;
   keyArt: string;
-  modifiers: ModifiersData[];
-  rewards: RewardsData[];
+  modifiers: ActivityModifiersOnActivity & ActivityModifier;
+  rewards: Collectible & { inventoryItem: InventoryItem };
 }

@@ -2,18 +2,23 @@ import LSChampions from "@/components/LSChampions";
 import LSModifiers from "@/components/LSModifiers";
 import LSRewards from "@/components/LSRewards";
 import LSShields from "@/components/LSShields";
-import { LostSectorData } from "@/global";
 import { CircularProgress, Tooltip } from "@mui/material";
 import dayjs from "dayjs";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import utc from "dayjs/plugin/utc";
+import useSWR from "swr";
+import { LostSectorData } from "@/global";
 
 dayjs.extend(utc);
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export default function Home() {
-  const [lostSectorData, setLostSectorData] = useState<any>(null);
+  // const [lostSectorData, setLostSectorData] = useState<any>(null);
+
+  const { data: lostSectorData }: { data: LostSectorData } = useSWR("/api/lost-sector", fetcher);
 
   const [xurIsHere, setXurIsHere] = useState<boolean>(false);
   const [xurData, setXurData] = useState<any>(null);
@@ -25,14 +30,13 @@ export default function Home() {
     setXurIsHere(false);
     setXurData(null);
 
-    const getLostSectorData = async () => {
-      const res = await fetch("/api/lost-sector");
-      const data = await res.json();
+    // const getLostSectorData = async () => {
+    //   const { data, error } = useSWR("/api/lost-sector");
 
-      const lsData: LostSectorData = data.lostSector;
+    //   const lsData: LostSectorData = data;
 
-      setLostSectorData(lsData);
-    };
+    //   setLostSectorData(lsData);
+    // };
 
     // const getXurData = async () => {
     //   const res = await fetch("/api/xur");
@@ -41,7 +45,7 @@ export default function Home() {
     //   setXurData(data);
     // };
 
-    getLostSectorData();
+    // getLostSectorData();
 
     // xur is only around from Friday reset to Tuesday reset
     // const now = dayjs.utc();
