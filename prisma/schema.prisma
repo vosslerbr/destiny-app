@@ -22,8 +22,16 @@ model ActivityDefinition {
 }
 
 model ActivityModifierDefinition {
-  hash BigInt @id
-  data Json @default("{}")
+  hash Int @id @db.UnsignedInt
+  redacted Boolean? @default(false)
+  displayInNavMode Boolean? @default(false)
+  displayInActivitySelection Boolean? @default(false)
+  blacklisted Boolean? @default(false)
+  description String? @db.Text
+  name String?
+  icon String? @db.Text
+  hasIcon Boolean? @default(false)
+  highResIcon String?
 }
 
 model ClassDefinition {
