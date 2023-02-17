@@ -1,5 +1,6 @@
+import populateClassDefs from "@/helpers/manifestPopulation/classDefs";
+import populateStatDefs from "@/helpers/manifestPopulation/statDefs";
 import prisma from "@/lib/prisma";
-import { ClassDefinition } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -13,30 +14,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const manifestResJson = await manifestRes.json();
 
-  const version: string = manifestResJson.Response.version;
+  // TODO uncomment for production
+  // const version: string = manifestResJson.Response.version;
 
-  // check if the manifest record in the db is the same as the one we just fetched
-  const manifestRecord = await prisma.manifest.findFirst({
-    where: {
-      version,
-    },
-  });
+  // // check if the manifest record in the db is the same as the one we just fetched
+  // const manifestRecord = await prisma.manifest.findFirst({
+  //   where: {
+  //     version,
+  //   },
+  // });
 
-  if (manifestRecord) {
-    console.log("Manifest is up to date");
+  // if (manifestRecord) {
+  //   console.log("Manifest is up to date");
 
-    res.status(200).json({ name: "John Doe" });
+  //   res.status(200).json({ name: "John Doe" });
 
-    return;
-  }
+  //   return;
+  // }
 
   // if not, delete the old one and create a new one
-  await prisma.manifest.deleteMany({});
-  await prisma.manifest.create({
-    data: {
-      version,
-    },
-  });
+  // await prisma.manifest.deleteMany({});
+  // await prisma.manifest.create({
+  //   data: {
+  //     version,
+  //   },
+  // });
 
   const tablesNeeded = [
     {
@@ -51,14 +53,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       name: "Collectible",
       model: "collectibleDefinition",
     },
-    // {
-    //   name: "InventoryItem",
-    //   model: "inventoryItemDefinition",
-    // },
     {
-      name: "Class",
-      model: "classDefinition",
+      name: "InventoryItem",
+      model: "inventoryItemDefinition",
     },
+    // {
+    //   name: "Class",
+    //   model: "classDefinition",
+    // },
     {
       name: "Vendor",
       model: "vendorDefinition",
@@ -69,40 +71,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   ];
 
-  const response = await fetch(
-    "https://www.bungie.net" +
-      manifestResJson.Response.jsonWorldComponentContentPaths.en.DestinyClassDefinition
-  );
+  const {
+    DestinyClassDefinition,
+    DestinyStatDefinition,
+  }: { DestinyClassDefinition: string; DestinyStatDefinition: string } =
+    manifestResJson.Response.jsonWorldComponentContentPaths.en;
 
-  const json = await response.json();
-
-  // @ts-ignore
-  await prisma.classDefinition.deleteMany({});
-
-  // make json into an array of objects
-  const jsonArray = Object.keys(json).map((key) => {
-    const numberHash = parseInt(key);
-
-    const classDef = json[key];
-
-    const data: ClassDefinition = {
-      hash: numberHash,
-      redacted: classDef.redacted,
-      classType: classDef.classType,
-      blacklisted: classDef.blacklisted,
-      description: classDef?.displayProperties?.description || "",
-      name: classDef?.displayProperties?.name || "",
-      icon: classDef?.displayProperties?.icon || "",
-      hasIcon: classDef?.displayProperties?.hasIcon ?? false,
-      highResIcon: classDef?.displayProperties?.highResIcon || "",
-    };
-
-    return data;
-  });
-
-  await prisma.classDefinition.createMany({
-    data: jsonArray,
-  });
+  await populateClassDefs(DestinyClassDefinition);
+  await populateStatDefs(DestinyStatDefinition);
 
   res.status(200).json({ name: "John Doe" });
 }

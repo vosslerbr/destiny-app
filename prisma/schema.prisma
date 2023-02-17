@@ -50,8 +50,18 @@ model VendorDefinition {
 }
 
 model StatDefinition {
-  hash BigInt @id
-  data Json @default("{}")
+  hash Int @id @db.UnsignedInt
+  redacted Boolean? @default(false)
+  aggregationType Int?
+  hasComputedBlock Boolean? @default(false)
+  blacklisted Boolean? @default(false)
+  description String? @db.Text
+  name String?
+  icon String? @db.Text
+  hasIcon Boolean? @default(false)
+  highResIcon String?
+  interpolate Boolean? @default(false)
+  statCategory Int?
 }
 
 model InventoryItemDefinition {
