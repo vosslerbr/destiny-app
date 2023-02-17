@@ -13,7 +13,7 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
 export default function Home() {
-  const [lostSectorData, setLostSectorData] = useState<LostSectorData | null>(null);
+  const [lostSectorData, setLostSectorData] = useState<any>(null);
 
   const [xurIsHere, setXurIsHere] = useState<boolean>(false);
   const [xurData, setXurData] = useState<any>(null);
@@ -31,30 +31,30 @@ export default function Home() {
       setLostSectorData(lsData);
     };
 
-    const getXurData = async () => {
-      const res = await fetch("/api/xur");
-      const data = await res.json();
+    // const getXurData = async () => {
+    //   const res = await fetch("/api/xur");
+    //   const data = await res.json();
 
-      setXurData(data);
-    };
+    //   setXurData(data);
+    // };
 
     getLostSectorData();
 
     // xur is only around from Friday reset to Tuesday reset
-    const now = dayjs.utc();
+    // const now = dayjs.utc();
 
-    const friday = 5;
-    const tuesday = 2;
+    // const friday = 5;
+    // const tuesday = 2;
 
     // reset is 17:00 UTC
-    const fridayReset = dayjs.utc().set("day", friday).hour(17).minute(0).second(0);
-    const tuesdayReset = dayjs.utc().set("day", tuesday).hour(17).minute(0).second(0);
+    // const fridayReset = dayjs.utc().set("day", friday).hour(17).minute(0).second(0);
+    // const tuesdayReset = dayjs.utc().set("day", tuesday).hour(17).minute(0).second(0);
 
     // if now is after friday reset and before tuesday reset, xur is here
-    if (dayjs(now).isAfter(fridayReset) && dayjs(now).isBefore(tuesdayReset)) {
-      setXurIsHere(true);
-      getXurData();
-    }
+    // if (dayjs(now).isAfter(fridayReset) && dayjs(now).isBefore(tuesdayReset)) {
+    //   setXurIsHere(true);
+    //   getXurData();
+    // }
 
     const interval = setInterval(() => {
       const diffInDays = dayjs

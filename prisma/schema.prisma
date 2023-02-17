@@ -18,6 +18,8 @@ model Manifest {
 
 model Activity {
   hash Int @id @db.UnsignedInt
+  name String? @db.Text
+  pgcrImage String? @db.Text
   modifiers ActivityModifiersOnActivity[]
   directActivityModeType Int?
 }
@@ -42,11 +44,7 @@ model ActivityModifiersOnActivity {
   activityHash Int @db.UnsignedInt
   activityModifier ActivityModifier @relation(fields: [activityModifierHash], references: [hash])
   activityModifierHash Int @db.UnsignedInt
-
-
-
   @@index ([activityHash, activityModifierHash], name: "activityHash_activityModifierHash")
-
   @@index ([activityModifierHash, activityHash], name: "activityModifierHash_activityHash")
 }
 
@@ -64,8 +62,12 @@ model Class {
 
 
 model Collectible {
-  hash BigInt @id
-  data Json @default("{}")
+  hash Int @id @db.UnsignedInt
+  sourceHash Int? @db.UnsignedInt
+  inventoryItem InventoryItem @relation(fields: [inventoryItemHash], references: [hash])
+  inventoryItemHash Int @db.UnsignedInt
+
+  @@index([inventoryItemHash, sourceHash], name: "inventoryItemHash_sourceHash")
 }
 
 model Vendor {
@@ -86,9 +88,46 @@ model Stat {
   highResIcon String?
   interpolate Boolean? @default(false)
   statCategory Int?
+  inventoryItems StatsOnInventoryItem[]
 }
 
 model InventoryItem {
-  hash BigInt @id
-  data Json @default("{}")
+  hash Int @id @db.UnsignedInt @unique
+  name String? @db.Text
+  icon String? @db.Text
+  hasIcon Boolean? @default(false)
+  highResIcon String? @db.Text
+  description String? @db.Text
+  collectibleHash Int? @db.UnsignedInt
+  screenshot String? @db.Text
+  itemTypeDisplayName String? @db.Text
+  flavorText String? @db.Text
+  uiItemDisplayStyle String? @db.Text
+  itemTypeAndTierDisplayName String? @db.Text
+  displaySource String? @db.Text
+  specialItemType Int?
+  itemType Int?
+  itemSubType Int?
+  classType Int?
+  breakerType Int?
+  equippable Boolean? @default(false)
+  defaultDamageType Int?
+  isWrapper Boolean? @default(false)
+  index Int?
+  redacted Boolean? @default(false)
+  blacklisted Boolean? @default(false)
+  collectible Collectible[]
+
+  stats StatsOnInventoryItem[]
+}
+
+model StatsOnInventoryItem {
+  id Int @id @default(autoincrement())
+  stat Stat @relation(fields: [statHash], references: [hash])
+  statHash Int @db.UnsignedInt
+  inventoryItem InventoryItem @relation(fields: [inventoryItemHash], references: [hash])
+  inventoryItemHash Int @db.UnsignedInt
+
+  @@index ([statHash, inventoryItemHash], name: "statHash_inventoryItemHash")
+  @@index ([inventoryItemHash, statHash], name: "inventoryItemHash_statHash")
 }

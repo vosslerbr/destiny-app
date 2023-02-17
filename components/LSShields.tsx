@@ -7,10 +7,10 @@ interface LSModifiersProps {
 
 export default function LSShields({ modifiers }: LSModifiersProps) {
   const shieldsObject = modifiers.find((modifier: any) => {
-    return modifier.name === "Shielded Foes";
+    return modifier.activityModifier.name === "Shielded Foes";
   });
 
-  const { description } = shieldsObject;
+  const { description } = shieldsObject.activityModifier;
 
   let regex = /\[([^\]]+)\]/g;
   let match: RegExpExecArray | null;
