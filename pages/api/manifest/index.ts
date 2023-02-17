@@ -1,3 +1,5 @@
+import populateActivityDefs from "@/helpers/manifestPopulation/activityDefs";
+import populateActivityModifierDefs from "@/helpers/manifestPopulation/activityModifierDefs";
 import populateClassDefs from "@/helpers/manifestPopulation/classDefs";
 import populateStatDefs from "@/helpers/manifestPopulation/statDefs";
 import prisma from "@/lib/prisma";
@@ -45,10 +47,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       name: "Activity",
       model: "activityDefinition",
     },
-    {
-      name: "ActivityModifier",
-      model: "activityModifierDefinition",
-    },
+    // {
+    //   name: "ActivityModifier",
+    //   model: "activityModifierDefinition",
+    // },
     {
       name: "Collectible",
       model: "collectibleDefinition",
@@ -74,11 +76,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const {
     DestinyClassDefinition,
     DestinyStatDefinition,
-  }: { DestinyClassDefinition: string; DestinyStatDefinition: string } =
-    manifestResJson.Response.jsonWorldComponentContentPaths.en;
+    DestinyActivityModifierDefinition,
+    DestinyActivityDefinition,
+  }: {
+    DestinyClassDefinition: string;
+    DestinyStatDefinition: string;
+    DestinyActivityModifierDefinition: string;
+    DestinyActivityDefinition: string;
+  } = manifestResJson.Response.jsonWorldComponentContentPaths.en;
 
   await populateClassDefs(DestinyClassDefinition);
   await populateStatDefs(DestinyStatDefinition);
+  await populateActivityModifierDefs(DestinyActivityModifierDefinition);
+  await populateActivityDefs(DestinyActivityDefinition);
 
   res.status(200).json({ name: "John Doe" });
 }

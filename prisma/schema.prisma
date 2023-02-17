@@ -17,8 +17,9 @@ model Manifest {
 }
 
 model Activity {
-  hash BigInt @id
-  data Json @default("{}")
+  hash Int @id @db.UnsignedInt
+  modifiers ActivityModifiersOnActivity[]
+  directActivityModeType Int?
 }
 
 model ActivityModifier {
@@ -32,6 +33,21 @@ model ActivityModifier {
   icon String? @db.Text
   hasIcon Boolean? @default(false)
   highResIcon String?
+  activities ActivityModifiersOnActivity[]
+}
+
+model ActivityModifiersOnActivity {
+  id Int @id @default(autoincrement())
+  activity Activity @relation(fields: [activityHash], references: [hash])
+  activityHash Int @db.UnsignedInt
+  activityModifier ActivityModifier @relation(fields: [activityModifierHash], references: [hash])
+  activityModifierHash Int @db.UnsignedInt
+
+
+
+  @@index ([activityHash, activityModifierHash], name: "activityHash_activityModifierHash")
+
+  @@index ([activityModifierHash, activityHash], name: "activityModifierHash_activityHash")
 }
 
 model Class {
