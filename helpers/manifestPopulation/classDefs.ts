@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { ClassDefinition } from "@prisma/client";
+import { Class } from "@prisma/client";
 
 const populateClassDefs = async (url: string) => {
   try {
@@ -7,7 +7,7 @@ const populateClassDefs = async (url: string) => {
 
     const json = await response.json();
 
-    await prisma.classDefinition.deleteMany({});
+    await prisma.class.deleteMany({});
 
     // make json into an array of objects
     const jsonArray = Object.keys(json).map((key) => {
@@ -15,7 +15,7 @@ const populateClassDefs = async (url: string) => {
 
       const classDef = json[key];
 
-      const data: ClassDefinition = {
+      const data: Class = {
         hash: numberHash,
         redacted: classDef.redacted,
         classType: classDef.classType,
@@ -30,7 +30,7 @@ const populateClassDefs = async (url: string) => {
       return data;
     });
 
-    await prisma.classDefinition.createMany({
+    await prisma.class.createMany({
       data: jsonArray,
     });
   } catch (error) {

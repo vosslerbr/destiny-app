@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { StatDefinition } from "@prisma/client";
+import { Stat } from "@prisma/client";
 
 const populateStatDefs = async (url: string) => {
   try {
@@ -7,7 +7,7 @@ const populateStatDefs = async (url: string) => {
 
     const json = await response.json();
 
-    await prisma.statDefinition.deleteMany({});
+    await prisma.stat.deleteMany({});
 
     // make json into an array of objects
     const jsonArray = Object.keys(json).map((key) => {
@@ -15,7 +15,7 @@ const populateStatDefs = async (url: string) => {
 
       const definition = json[key];
 
-      const data: StatDefinition = {
+      const data: Stat = {
         hash: numberHash,
         redacted: definition.redacted,
         aggregationType: definition.aggregationType,
@@ -33,7 +33,7 @@ const populateStatDefs = async (url: string) => {
       return data;
     });
 
-    await prisma.statDefinition.createMany({
+    await prisma.stat.createMany({
       data: jsonArray,
     });
   } catch (error) {

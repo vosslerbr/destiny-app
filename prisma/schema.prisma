@@ -16,12 +16,12 @@ model Manifest {
   version String
 }
 
-model ActivityDefinition {
+model Activity {
   hash BigInt @id
   data Json @default("{}")
 }
 
-model ActivityModifierDefinition {
+model ActivityModifier {
   hash Int @id @db.UnsignedInt
   redacted Boolean? @default(false)
   displayInNavMode Boolean? @default(false)
@@ -34,7 +34,7 @@ model ActivityModifierDefinition {
   highResIcon String?
 }
 
-model ClassDefinition {
+model Class {
   hash Int @id @db.UnsignedInt
   redacted Boolean @default(false)
   classType Int
@@ -47,17 +47,17 @@ model ClassDefinition {
 }
 
 
-model CollectibleDefinition {
+model Collectible {
   hash BigInt @id
   data Json @default("{}")
 }
 
-model VendorDefinition {
+model Vendor {
   hash BigInt @id
   data Json @default("{}")
 }
 
-model StatDefinition {
+model Stat {
   hash Int @id @db.UnsignedInt
   redacted Boolean? @default(false)
   aggregationType Int?
@@ -72,7 +72,7 @@ model StatDefinition {
   statCategory Int?
 }
 
-model InventoryItemDefinition {
+model InventoryItem {
   hash BigInt @id
   data Json @default("{}")
 }
