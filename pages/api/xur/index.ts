@@ -1,6 +1,8 @@
+import itemTypeMap from "@/helpers/itemTypeMap";
 import {
   getInventoryItem,
   getStat,
+  getVendor,
   includeTables,
   load,
   setApiKey,
@@ -47,6 +49,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const xurSaleKEYS = Object.keys(xurSales);
 
+  const xur = getVendor(2190858386);
+
   for (const key of xurSaleKEYS) {
     const item = xurSales[key];
 
@@ -62,6 +66,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       icon: string;
       screenshot: string;
       itemTypeAndTier: string;
+      itemType: string;
+      itemTier: string;
       stats: any[];
     } = {
       name: inventoryItem.displayProperties.name,
@@ -69,6 +75,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       icon: inventoryItem.displayProperties.icon,
       screenshot: inventoryItem.screenshot,
       itemTypeAndTier: inventoryItem.itemTypeAndTierDisplayName,
+      itemType: itemTypeMap[inventoryItem.itemType].singular,
+      itemTier: getInventoryItem(inventoryItem.summaryItemHash)?.displayProperties.name || "",
       stats: [],
     };
 
@@ -91,5 +99,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     unformattedItems.push(inventoryItem);
   }
 
-  res.status(200).json({ xurSales, items, unformattedItems });
+  res.status(200).json({
+    xur: { keyart: xur?.displayProperties.largeIcon, name: xur?.displayProperties.name },
+    xurSales,
+    items,
+    unformattedItems,
+  });
 }

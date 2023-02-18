@@ -4,6 +4,12 @@ export interface ClassTypeMap {
   [key: number]: string;
 }
 
+export interface ItemTypeMap {
+  [key: number]: {
+    singular: string;
+    plural: string;
+  };
+}
 export interface LostSectorScheduleDay {
   name: string;
   hash: number;
