@@ -1,8 +1,9 @@
 import { Tooltip } from "@mui/material";
+import { ActivityModifier, ActivityModifiersOnActivity } from "@prisma/client";
 import Image from "next/image";
 
 interface LSModifiersProps {
-  modifiers: any[];
+  modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
 }
 
 export default function LSShields({ modifiers }: LSModifiersProps) {
@@ -10,13 +11,17 @@ export default function LSShields({ modifiers }: LSModifiersProps) {
     return modifier.activityModifier.name === "Shielded Foes";
   });
 
+  if (!shieldsObject) {
+    return <></>;
+  }
+
   const { description } = shieldsObject.activityModifier;
 
   let regex = /\[([^\]]+)\]/g;
   let match: RegExpExecArray | null;
   let shieldTypes: string[] = [];
 
-  while ((match = regex.exec(description)) !== null) {
+  while ((match = regex.exec(description ?? "")) !== null) {
     shieldTypes.push(match[1]);
   }
 

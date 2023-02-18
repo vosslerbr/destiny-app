@@ -1,15 +1,23 @@
 import classTypeMap from "@/helpers/classTypeMap";
 import { Dialog, DialogContent, DialogTitle, Tooltip } from "@mui/material";
+import { Collectible, InventoryItem } from "@prisma/client";
 import Image from "next/image";
 import { useState } from "react";
 
 interface LSRewardsProps {
-  rewards: any[];
+  rewards: (Collectible & {
+    inventoryItem: InventoryItem;
+  })[];
 }
 
 export default function LSRewards({ rewards }: LSRewardsProps) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState<any>(null);
+  const [modalContent, setModalContent] = useState<
+    | (Collectible & {
+        inventoryItem: InventoryItem;
+      })
+    | null
+  >(null);
 
   const handleClose = () => {
     setModalOpen(false);
@@ -24,13 +32,13 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
           const { icon, name } = reward.inventoryItem;
 
           return (
-            <Tooltip title={name} key={`${reward.name}_tooltip`}>
+            <Tooltip title={name} key={`${name}_tooltip`}>
               <Image
                 src={`https://www.bungie.net${icon}`}
-                alt={name}
+                alt={name || "Reward"}
                 width="48"
                 height="48"
-                key={`${reward.name}_image`}
+                key={`${name}_image`}
                 className="image-rounded reward-image"
                 onClick={() => {
                   setModalContent(reward);
@@ -46,7 +54,9 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
           <DialogTitle>{modalContent.inventoryItem.name}</DialogTitle>
           <DialogContent>
             <p>
-              {classTypeMap[modalContent.inventoryItem.classType]}{" "}
+              {typeof modalContent.inventoryItem.classType === "number"
+                ? classTypeMap[modalContent.inventoryItem.classType]
+                : ""}{" "}
               {modalContent.inventoryItem.itemTypeAndTierDisplayName}
             </p>
 
@@ -54,13 +64,14 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
               <Image
                 src={`https://www.bungie.net${modalContent.inventoryItem.screenshot}`}
                 blurDataURL={`https://www.bungie.net${modalContent.inventoryItem.screenshot}`}
-                alt={modalContent.inventoryItem.name}
+                alt={modalContent.inventoryItem.name || "Reward"}
                 fill={true}
                 style={{
                   objectFit: "contain",
                 }}
               />
             </div>
+            <p>{modalContent.inventoryItem.flavorText}</p>
           </DialogContent>
         </Dialog>
       )}

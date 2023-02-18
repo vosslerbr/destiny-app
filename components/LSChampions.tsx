@@ -1,14 +1,19 @@
 import { Tooltip } from "@mui/material";
+import { ActivityModifier, ActivityModifiersOnActivity } from "@prisma/client";
 import Image from "next/image";
 
 interface LSModifiersProps {
-  modifiers: any[];
+  modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
 }
 
 export default function LSChampions({ modifiers }: LSModifiersProps) {
   const championsObject = modifiers.find((modifier: any) => {
     return modifier.activityModifier.name === "Champion Foes";
   });
+
+  if (!championsObject) {
+    return <></>;
+  }
 
   const championNameMap: { [key: string]: string } = {
     Disruption: "Overload",
@@ -22,7 +27,7 @@ export default function LSChampions({ modifiers }: LSModifiersProps) {
   let match: RegExpExecArray | null;
   let championTypes: string[] = [];
 
-  while ((match = regex.exec(description)) !== null) {
+  while ((match = regex.exec(description ?? "")) !== null) {
     championTypes.push(match[1]);
   }
 

@@ -1,8 +1,9 @@
 import { Tooltip } from "@mui/material";
+import { ActivityModifier, ActivityModifiersOnActivity } from "@prisma/client";
 import Image from "next/image";
 
 interface LSModifiersProps {
-  modifiers: any[];
+  modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
 }
 
 export default function LSModifiers({ modifiers }: LSModifiersProps) {

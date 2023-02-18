@@ -84,7 +84,7 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(18, 24, 38);
+  background: rgb(16, 19, 27);
 }
 
 a {
@@ -111,7 +111,7 @@ main {
 
 .activity-card,
 .xur-card {
-  background: rgb(26, 35, 55);
+  background: rgb(24, 26, 37);
   padding: 2rem;
   border-radius: 5px;
   margin-bottom: 4rem;
@@ -119,9 +119,17 @@ main {
 }
 
 .activity-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 2rem;
+  padding: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.activity-card-inner {
+  background-color: rgb(18 24 38 / 34%);
+  backdrop-filter: blur(4px);
+  padding: 2rem;
+  width: max-content;
 }
 
 .xur-card {
@@ -203,19 +211,19 @@ main {
     margin: 1rem auto;
   }
 
-  .activity-card {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 1rem;
-  }
-
   .activity-card h2 {
     font-size: 1.5rem;
   }
 
+  .activity-card-inner {
+    padding: 1rem;
+    width: 100%;
+    border-radius: 5px;
+  }
+
   .activity-metadata img {
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     margin-right: 0.75rem;
   }
 

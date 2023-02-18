@@ -19,6 +19,9 @@ const populateActivityDefs = async (url: string) => {
       const data: Activity = {
         hash: numberHash,
         name: definition.originalDisplayProperties.name,
+        detailedName: definition.displayProperties.name,
+        description: definition.displayProperties.description,
+        lightLevel: definition.activityLightLevel,
         pgcrImage: definition.pgcrImage,
         directActivityModeType: definition.directActivityModeType,
       };

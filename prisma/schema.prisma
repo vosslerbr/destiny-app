@@ -19,6 +19,9 @@ model Manifest {
 model Activity {
   hash Int @id @db.UnsignedInt
   name String? @db.Text
+  detailedName String? @db.Text
+  description String? @db.Text
+  lightLevel Int?
   pgcrImage String? @db.Text
   modifiers ActivityModifiersOnActivity[]
   directActivityModeType Int?

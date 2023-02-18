@@ -100,25 +100,17 @@ export default function Home() {
       </Head>
       <main>
         {lostSectorData ? (
-          <div className="activity-card">
-            <div>
+          <div
+            className="activity-card"
+            style={{
+              backgroundImage: `url(https://www.bungie.net${lostSectorData.keyArt})`,
+            }}>
+            <div className="activity-card-inner">
               <div>
                 <h3>Today&apos;s Lost Sector is</h3>
                 <h2>{lostSectorData.name}</h2>
               </div>
-              <Image
-                placeholder="blur"
-                blurDataURL={`https://www.bungie.net${lostSectorData.keyArt}`}
-                src={`https://www.bungie.net${lostSectorData.keyArt}`}
-                alt={lostSectorData.name}
-                width="437"
-                height="245"
-                priority
-                className="image-rounded"
-                id="ls-keyart"></Image>
-            </div>
 
-            <div>
               <LSRewards rewards={lostSectorData.rewards} />
               <LSShields modifiers={lostSectorData.modifiers} />
               <LSChampions modifiers={lostSectorData.modifiers} />
