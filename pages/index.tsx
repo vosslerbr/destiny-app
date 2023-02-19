@@ -50,11 +50,19 @@ export default function Home() {
     // xur is only around from Friday reset to Tuesday reset
     const now = dayjs.utc();
 
+    console.log(now.day());
+
     const friday = 5;
     const tuesday = 2;
 
     // reset is 17:00 UTC
-    const fridayReset = dayjs.utc().set("day", friday).hour(17).minute(0).second(0);
+    const fridayReset = dayjs
+      .utc()
+      .set("day", friday)
+      .hour(17)
+      .minute(0)
+      .second(0)
+      .subtract(now.day() === 0 ? 1 : 0, "week");
     const tuesdayReset = dayjs
       .utc()
       .set("day", tuesday)
@@ -62,6 +70,9 @@ export default function Home() {
       .minute(0)
       .second(0)
       .add(now.day() === 0 ? 0 : 1, "week"); // if today is sunday, it's a new week and we don't need to add 1 week
+
+    console.log(fridayReset);
+    console.log(tuesdayReset);
 
     // if now is after friday reset and before tuesday reset, xur is here
     if (dayjs(now).isAfter(fridayReset) && dayjs(now).isBefore(tuesdayReset)) {

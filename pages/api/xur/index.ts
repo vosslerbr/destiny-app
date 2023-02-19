@@ -1,19 +1,9 @@
 import itemTypeMap from "@/helpers/itemTypeMap";
-import {
-  getInventoryItem,
-  getStat,
-  getVendor,
-  includeTables,
-  load,
-  setApiKey,
-  verbose,
-} from "@d2api/manifest-node";
+import prisma from "@/lib/prisma";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-// import fs from "fs";
+// TODO this route is slow, need to figure out how to speed it up. Takes about 6 seconds to load right now
 
-// This is how we keep some of the data we need up to date
-// TODO eventually we should setup a cron to do this for us
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
     res.status(405).send("Method not allowed");
@@ -21,15 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  verbose(); // make the client chatty. if you want.
-  setApiKey(process.env.BUNGIE_API_KEY!);
-  includeTables(["Vendor", "InventoryItem", "Stat"]);
-
-  await load();
-
-  console.log(process.env.BUNGIE_API_KEY);
-
-  // fetch the latest Xur info
+  // fetch the latest Xur info, the manifest doesn't have this info
   const xurResponse = await fetch(
     "https://bungie.net/Platform/Destiny2/Vendors/?components=400,402,302,304",
     {
@@ -49,16 +31,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const xurSaleKEYS = Object.keys(xurSales);
 
-  const xur = getVendor(2190858386);
+  const xur = await prisma.vendor.findUnique({
+    where: {
+      hash: 2190858386,
+    },
+  });
 
   for (const key of xurSaleKEYS) {
     const item = xurSales[key];
 
     const itemHash = item.itemHash;
 
-    const inventoryItem = getInventoryItem(itemHash);
+    const inventoryItem = await prisma.inventoryItem.findUnique({
+      where: {
+        hash: itemHash,
+      },
+      include: {
+        stats: true,
+      },
+    });
 
     if (!inventoryItem || !inventoryItem.stats) continue;
+
+    const summaryInventoryItem = inventoryItem.summaryItemHash
+      ? await prisma.inventoryItem.findUnique({
+          where: {
+            hash: inventoryItem.summaryItemHash,
+          },
+        })
+      : null;
 
     const formattedItem: {
       name: string;
@@ -70,37 +71,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       itemTier: string;
       stats: any[];
     } = {
-      name: inventoryItem.displayProperties.name,
-      description: inventoryItem.displayProperties.description,
-      icon: inventoryItem.displayProperties.icon,
-      screenshot: inventoryItem.screenshot,
-      itemTypeAndTier: inventoryItem.itemTypeAndTierDisplayName,
-      itemType: itemTypeMap[inventoryItem.itemType].singular,
-      itemTier: getInventoryItem(inventoryItem.summaryItemHash)?.displayProperties.name || "",
+      name: inventoryItem.name || "",
+      description: inventoryItem.description || "",
+      icon: inventoryItem.icon || "",
+      screenshot: inventoryItem.screenshot || "",
+      itemTypeAndTier: inventoryItem.itemTypeAndTierDisplayName || "",
+      itemType:
+        typeof inventoryItem.itemType === "number"
+          ? itemTypeMap[inventoryItem.itemType].singular
+          : "",
+      itemTier: summaryInventoryItem?.name || "",
       stats: [],
     };
 
-    const statHashes = Object.keys(inventoryItem.stats.stats);
-
-    for (const hash of statHashes) {
-      if (!hash) continue;
-
-      const statName = getStat(hash);
-
-      const statObj = {
-        name: statName?.displayProperties.name,
-        value: inventoryItem.stats.stats[parseInt(hash)].value,
-      };
-
-      formattedItem.stats.push(statObj);
-    }
+    // TODO stats
 
     items.push(formattedItem);
     unformattedItems.push(inventoryItem);
   }
 
   res.status(200).json({
-    xur: { keyart: xur?.displayProperties.largeIcon, name: xur?.displayProperties.name },
+    xur: { keyart: xur?.specialImage, name: xur?.name },
     xurSales,
     items,
     unformattedItems,
