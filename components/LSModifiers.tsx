@@ -18,8 +18,10 @@ export default function LSModifiers({ modifiers }: LSModifiersProps) {
 
             const notShieldedFoes = name !== "Shielded Foes";
             const notChampionFoes = name !== "Champion Foes";
+            const notVanguardRank = name !== "Increased Vanguard Rank";
+            const notDoubleDrops = name !== "Double Nightfall Drops";
 
-            return icon && notShieldedFoes && notChampionFoes;
+            return icon && notShieldedFoes && notChampionFoes && notVanguardRank && notDoubleDrops;
           })
           .map((modifier: any) => {
             const { icon, name, description } = modifier.activityModifier;

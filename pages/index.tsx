@@ -8,7 +8,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import utc from "dayjs/plugin/utc";
 import useSWR from "swr";
-import { LostSectorData } from "@/global";
+import { LostSectorData, NightfallData } from "@/global";
 import XurLegendaryWeapons from "@/components/XurLegendaryWeapons";
 import XurExotics from "@/components/XurExotics";
 import XurQuestExotics from "@/components/XurQuestExotics";
@@ -27,9 +27,8 @@ const resetTime = dayjs
   .format("hh:mm a");
 
 export default function Home() {
-  // const [lostSectorData, setLostSectorData] = useState<any>(null);
-
   const { data: lostSectorData }: { data: LostSectorData } = useSWR("/api/lost-sector", fetcher);
+  const { data: nightfallData }: { data: NightfallData } = useSWR("/api/nightfall", fetcher);
 
   const [xurIsHere, setXurIsHere] = useState<boolean>(false);
   const [xurData, setXurData] = useState<any>(null);
@@ -166,6 +165,41 @@ export default function Home() {
           </div>
         ) : (
           // TODO loading component
+          <CircularProgress />
+        )}
+
+        {nightfallData ? (
+          <div
+            className="activity-card"
+            style={{
+              backgroundImage: `url(https://www.bungie.net${nightfallData.keyart})`,
+            }}>
+            <div className="activity-card-inner">
+              <div>
+                <h3>This week&apos;s Nightfall is</h3>
+                <h2>{nightfallData.name}</h2>
+              </div>
+
+              {/* we only need these once, so just grab from grandmaster */}
+              <LSShields modifiers={nightfallData.difficulties[4].modifiers} />
+              <LSChampions modifiers={nightfallData.difficulties[4].modifiers} />
+
+              {nightfallData.difficulties.map((difficulty: any) => {
+                return (
+                  <div
+                    key={difficulty.detailedName}
+                    style={{
+                      borderBottom: "1px solid #ffffff25",
+                    }}>
+                    <h3>{difficulty.detailedName}</h3>
+
+                    <LSModifiers modifiers={difficulty.modifiers} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
           <CircularProgress />
         )}
       </main>

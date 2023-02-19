@@ -24,3 +24,13 @@ export interface LostSectorData {
   modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
   rewards: (Collectible & { inventoryItem: InventoryItem })[];
 }
+
+export interface NightfallData {
+  name: string | null;
+  keyart: string | null;
+  difficulties: (Activity & {
+    modifiers: (ActivityModifiersOnActivity & {
+      activityModifier: ActivityModifier;
+    })[];
+  })[];
+}
