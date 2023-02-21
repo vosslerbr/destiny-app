@@ -2,7 +2,15 @@ import LSChampions from "@/components/LSChampions";
 import LSModifiers from "@/components/LSModifiers";
 import LSRewards from "@/components/LSRewards";
 import LSShields from "@/components/LSShields";
-import { CircularProgress } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  CircularProgress,
+  LinearProgress,
+  Typography,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import dayjs from "dayjs";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -27,7 +35,10 @@ const resetTime = dayjs
   .format("hh:mm a");
 
 export default function Home() {
-  const { data: lostSectorData }: { data: LostSectorData } = useSWR("/api/lost-sector", fetcher);
+  const { data: lostSectorData }: { data: LostSectorData; isLoading: boolean } = useSWR(
+    "/api/lost-sector",
+    fetcher
+  );
   const { data: nightfallData }: { data: NightfallData } = useSWR("/api/nightfall", fetcher);
 
   const [xurIsHere, setXurIsHere] = useState<boolean>(false);
@@ -54,27 +65,16 @@ export default function Home() {
     const friday = 5;
     const tuesday = 2;
 
-    // reset is 17:00 UTC
-    const fridayReset = dayjs
-      .utc()
-      .set("day", friday)
-      .hour(17)
-      .minute(0)
-      .second(0)
-      .subtract(now.day() === 0 ? 1 : 0, "week");
-    const tuesdayReset = dayjs
-      .utc()
-      .set("day", tuesday)
-      .hour(17)
-      .minute(0)
-      .second(0)
-      .add(now.day() === 0 ? 0 : 1, "week"); // if today is sunday, it's a new week and we don't need to add 1 week
+    const weekend = [6, 0, 1];
 
-    console.log(fridayReset);
-    console.log(tuesdayReset);
+    if (weekend.includes(now.day())) {
+      setXurIsHere(true);
+      getXurData();
 
-    // if now is after friday reset and before tuesday reset, xur is here
-    if (dayjs(now).isAfter(fridayReset) && dayjs(now).isBefore(tuesdayReset)) {
+      return;
+    }
+
+    if ((now.day() === friday && now.hour() >= 17) || (now.day() === tuesday && now.hour() < 17)) {
       setXurIsHere(true);
       getXurData();
 
@@ -137,7 +137,12 @@ export default function Home() {
           </div>
         ) : (
           // TODO loading component
-          <CircularProgress />
+          <div className="activity-card">
+            <div className="loading-container">
+              <h2>Loading Lost Sector Data...</h2>
+              <LinearProgress />
+            </div>
+          </div>
         )}
 
         {!xurIsHere ? (
@@ -165,7 +170,12 @@ export default function Home() {
           </div>
         ) : (
           // TODO loading component
-          <CircularProgress />
+          <div className="activity-card">
+            <div className="loading-container">
+              <h2>Loading Xur&apos;s Inventory...</h2>
+              <LinearProgress />
+            </div>
+          </div>
         )}
 
         {nightfallData ? (
@@ -180,27 +190,78 @@ export default function Home() {
                 <h2>{nightfallData.name}</h2>
               </div>
 
-              {/* we only need these once, so just grab from grandmaster */}
-              <LSShields modifiers={nightfallData.difficulties[4].modifiers} />
-              <LSChampions modifiers={nightfallData.difficulties[4].modifiers} />
+              {/* we only need these once, so just grab from master */}
+              <LSShields modifiers={nightfallData.difficulties[3].modifiers} />
+              <LSChampions modifiers={nightfallData.difficulties[3].modifiers} />
 
               {nightfallData.difficulties.map((difficulty: any) => {
                 return (
-                  <div
-                    key={difficulty.detailedName}
-                    style={{
-                      borderBottom: "1px solid #ffffff25",
-                    }}>
-                    <h3>{difficulty.detailedName}</h3>
-
-                    <LSModifiers modifiers={difficulty.modifiers} />
+                  <div key={difficulty.detailedName}>
+                    <Accordion
+                      sx={{
+                        backgroundColor: "transparent",
+                        color: "rgba(255, 255, 255, 0.5)",
+                        boxShadow: "none",
+                      }}>
+                      <AccordionSummary
+                        expandIcon={
+                          <ExpandMoreIcon
+                            sx={{
+                              color: "rgba(255, 255, 255, 0.5)",
+                            }}
+                          />
+                        }
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                        sx={{
+                          border: "none",
+                          paddingLeft: "0rem",
+                        }}>
+                        <Typography>{difficulty.detailedName} Modifiers</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <LSModifiers modifiers={difficulty.modifiers} showTitle={false} />
+                      </AccordionDetails>
+                    </Accordion>
                   </div>
                 );
               })}
             </div>
           </div>
         ) : (
-          <CircularProgress />
+          <div className="activity-card">
+            <div className="loading-container">
+              <h2>Loading Nightfall Data...</h2>
+              <LinearProgress />
+            </div>
+          </div>
+        )}
+
+        {nightfallData ? (
+          <div
+            className="activity-card"
+            style={{
+              backgroundImage: `url(https://www.bungie.net${nightfallData.keyart})`,
+              border: "2px solid #ad8f1e",
+            }}>
+            <div className="activity-card-inner">
+              <div>
+                <h3>This week&apos;s Grandmaster Nightfall is</h3>
+                <h2>{nightfallData.name}</h2>
+              </div>
+
+              <LSShields modifiers={nightfallData.grandmaster.modifiers} />
+              <LSChampions modifiers={nightfallData.grandmaster.modifiers} />
+              <LSModifiers modifiers={nightfallData.grandmaster.modifiers} />
+            </div>
+          </div>
+        ) : (
+          <div className="activity-card">
+            <div className="loading-container">
+              <h2>Loading Grandmaster Nightfall Data...</h2>
+              <LinearProgress />
+            </div>
+          </div>
         )}
       </main>
     </>

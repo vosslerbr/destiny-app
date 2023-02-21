@@ -33,4 +33,9 @@ export interface NightfallData {
       activityModifier: ActivityModifier;
     })[];
   })[];
+  grandmaster: Activity & {
+    modifiers: (ActivityModifiersOnActivity & {
+      activityModifier: ActivityModifier;
+    })[];
+  };
 }

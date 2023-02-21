@@ -14,10 +14,10 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
       <h4>Rewards</h4>
       <div>
         {rewards.map((reward) => {
-          const { icon, name } = reward.inventoryItem;
+          const { icon, name, hash } = reward.inventoryItem;
 
           return (
-            <Tooltip title={name} key={`${name}_tooltip`}>
+            <Tooltip title={name} key={`${hash}_tooltip`}>
               <Image
                 src={`https://www.bungie.net${icon}`}
                 alt={name || "Reward"}

@@ -4,15 +4,17 @@ import Image from "next/image";
 
 interface LSModifiersProps {
   modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
+  showTitle?: boolean;
 }
 
-export default function LSModifiers({ modifiers }: LSModifiersProps) {
+export default function LSModifiers({ modifiers, showTitle = true }: LSModifiersProps) {
   return (
     <div className="modifiers-container activity-metadata">
-      <h4>Modifiers</h4>
+      {showTitle && <h4>Modifiers</h4>}
+
       <div>
         {modifiers
-          .filter((modifier: any) => {
+          .filter((modifier) => {
             // Filter out the "Shielded Foes" and "Champion Foes" modifiers as well as any modifiers without an icon
             const { name, icon } = modifier.activityModifier;
 
@@ -23,14 +25,14 @@ export default function LSModifiers({ modifiers }: LSModifiersProps) {
 
             return icon && notShieldedFoes && notChampionFoes && notVanguardRank && notDoubleDrops;
           })
-          .map((modifier: any) => {
-            const { icon, name, description } = modifier.activityModifier;
+          .map((modifier) => {
+            const { icon, name, description, hash } = modifier.activityModifier;
 
             return (
-              <Tooltip title={`${name}: ${description}`} key={`${name}_tooltip`}>
+              <Tooltip title={`${name}: ${description}`} key={`${hash}_tooltip`}>
                 <Image
                   src={`https://www.bungie.net${icon}`}
-                  alt={name}
+                  alt={name || "modifier"}
                   width="48"
                   height="48"
                   key={`${name}_image`}

@@ -91,13 +91,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   });
 
-  const nightfallActivities = [
-    adeptNightfall,
-    heroNightfall,
-    legendNightfall,
-    masterNightfall,
-    grandmasterNightfall,
-  ];
+  const nightfallActivities = [adeptNightfall, heroNightfall, legendNightfall, masterNightfall];
 
   const keyart = adeptNightfall?.pgcrImage;
   const name = adeptNightfall?.description;
@@ -107,7 +101,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const data = { name, keyart, difficulties: nightfallActivities };
+  const data = {
+    name,
+    keyart,
+    difficulties: nightfallActivities,
+    grandmaster: grandmasterNightfall,
+  };
 
   // return the data
   res.status(200).json(data);
