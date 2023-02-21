@@ -6,7 +6,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  CircularProgress,
   LinearProgress,
   Typography,
 } from "@mui/material";
