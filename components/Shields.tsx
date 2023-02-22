@@ -6,7 +6,7 @@ interface LSModifiersProps {
   modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
 }
 
-export default function LSShields({ modifiers }: LSModifiersProps) {
+export default function Shields({ modifiers }: LSModifiersProps) {
   const shieldsObject = modifiers.find((modifier: any) => {
     return modifier.activityModifier.name === "Shielded Foes";
   });
@@ -27,7 +27,7 @@ export default function LSShields({ modifiers }: LSModifiersProps) {
 
   const shields = shieldTypes.map((shieldType: string) => {
     return (
-      <Tooltip title={shieldType} key={`${shieldType}_tooltip`}>
+      <Tooltip title={shieldType} key={`${shieldType}_tooltip`} arrow>
         <Image
           src={`/${shieldType.toLowerCase()}.png`}
           alt={shieldType}

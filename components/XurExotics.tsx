@@ -18,7 +18,7 @@ export default function XurExotics({ items }: any) {
             const { icon, name } = item;
 
             return (
-              <Tooltip title={name} key={`${name}_tooltip`}>
+              <Tooltip title={name} key={`${name}_tooltip`} arrow>
                 <Image
                   src={`https://www.bungie.net${icon}`}
                   alt={name || "Reward"}

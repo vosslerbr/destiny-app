@@ -6,7 +6,7 @@ interface LSModifiersProps {
   modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
 }
 
-export default function LSChampions({ modifiers }: LSModifiersProps) {
+export default function Champions({ modifiers }: LSModifiersProps) {
   const championsObject = modifiers.find((modifier: any) => {
     return modifier.activityModifier.name === "Champion Foes";
   });
@@ -35,7 +35,7 @@ export default function LSChampions({ modifiers }: LSModifiersProps) {
     const champName = championNameMap[championType];
 
     return (
-      <Tooltip title={champName} key={`${champName}_tooltip`}>
+      <Tooltip title={champName} key={`${champName}_tooltip`} arrow>
         <Image
           src={`/${champName.toLowerCase()}.png`}
           alt={champName}

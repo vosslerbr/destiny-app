@@ -8,7 +8,7 @@ interface LSRewardsProps {
   })[];
 }
 
-export default function LSRewards({ rewards }: LSRewardsProps) {
+export default function Rewards({ rewards }: LSRewardsProps) {
   return (
     <div className="rewards-container activity-metadata">
       <h4>Rewards</h4>
@@ -17,7 +17,7 @@ export default function LSRewards({ rewards }: LSRewardsProps) {
           const { icon, name, hash } = reward.inventoryItem;
 
           return (
-            <Tooltip title={name} key={`${hash}_tooltip`}>
+            <Tooltip title={name} key={`${hash}_tooltip`} arrow>
               <Image
                 src={`https://www.bungie.net${icon}`}
                 alt={name || "Reward"}

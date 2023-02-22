@@ -7,7 +7,7 @@ interface LSModifiersProps {
   showTitle?: boolean;
 }
 
-export default function LSModifiers({ modifiers, showTitle = true }: LSModifiersProps) {
+export default function Modifiers({ modifiers, showTitle = true }: LSModifiersProps) {
   return (
     <div className="modifiers-container activity-metadata">
       {showTitle && <h4>Modifiers</h4>}
@@ -29,7 +29,7 @@ export default function LSModifiers({ modifiers, showTitle = true }: LSModifiers
             const { icon, name, description, hash } = modifier.activityModifier;
 
             return (
-              <Tooltip title={`${name}: ${description}`} key={`${hash}_tooltip`}>
+              <Tooltip title={`${name}: ${description}`} key={`${hash}_tooltip`} arrow>
                 <Image
                   src={`https://www.bungie.net${icon}`}
                   alt={name || "modifier"}
