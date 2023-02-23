@@ -110,7 +110,8 @@ main {
 }
 
 .activity-card,
-.xur-card {
+.xur-card,
+.activity-card-detail {
   background: rgb(24, 26, 37);
   padding: 2rem;
   border-radius: 5px;
@@ -118,7 +119,8 @@ main {
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.activity-card {
+.activity-card,
+.activity-card-detail {
   padding: 0;
   background-repeat: no-repeat;
   background-size: cover;
@@ -141,6 +143,16 @@ main {
 
 .xur-card {
   text-align: center;
+}
+
+h1 {
+  font-size: 3.5rem;
+}
+
+.activity-card-detail h2 {
+  opacity: 0.5;
+  font-style: italic;
+  margin-bottom: 2rem;
 }
 
 .xur-card h2 {
@@ -190,10 +202,6 @@ main {
   margin-bottom: 0.5rem;
 }
 
-.reward-image {
-  cursor: pointer;
-}
-
 .modal-image-container {
   width: 400px;
   height: 225px;
@@ -207,6 +215,79 @@ main {
 
 .activity-metadata img:last-child {
   margin-right: 0;
+}
+
+.activity-rewards-detail h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.activity-rewards-detail-inner {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 1rem;
+}
+
+.reward-card {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgb(24, 26, 37);
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.reward-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.reward-card h3 {
+  margin-bottom: 0.5rem;
+}
+.reward-card-header p {
+  opacity: 0.5;
+}
+.reward-card-body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.reward-card-body img {
+  object-fit: cover;
+  position: relative !important;
+}
+
+.reward-unlock-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  margin-top: 2rem;
+}
+
+.reward-unlock-detail span {
+  width: 100%;
+  background-color: gray;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+/* TODO make these into classes */
+.reward-unlock-detail .yes {
+  border: 2px solid rgb(50, 204, 117);
+  background-color: transparent;
+  color: rgb(50, 204, 117);
+}
+
+.reward-unlock-detail .no {
+  border: 2px solid rgb(204, 50, 50);
+  background-color: transparent;
+  color: rgb(204, 50, 50);
 }
 
 @media screen and (max-width: 890px) {
