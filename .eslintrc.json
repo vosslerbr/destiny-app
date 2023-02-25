@@ -1,7 +1,6 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "camelcase": "error",
     "spaced-comment": 2,
     "no-unused-vars": 2
   }

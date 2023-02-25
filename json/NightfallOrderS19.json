@@ -1,0 +1,62 @@
+[
+  {
+    "name": "The Insight Terminus",
+    "difficulties": {
+      "adept": 3029388708,
+      "hero": 3029388711,
+      "legend": 3029388710,
+      "master": 3029388705,
+      "grandmaster": 3029388704
+    }
+  },
+  {
+    "name": "The Scarlet Keep",
+    "difficulties": {
+      "adept": 1495545952,
+      "hero": 1495545955,
+      "legend": 1495545954,
+      "master": 1495545957,
+      "grandmaster": 1495545956
+    }
+  },
+  {
+    "name": "Birthplace of the Vile",
+    "difficulties": {
+      "adept": 2766844310,
+      "hero": 2766844309,
+      "legend": 2766844308,
+      "master": 2766844307,
+      "grandmaster": 2766844306
+    }
+  },
+  {
+    "name": "The Corrupted",
+    "difficulties": {
+      "adept": 2416314397,
+      "hero": 2416314398,
+      "legend": 2416314399,
+      "master": 2416314392,
+      "grandmaster": 2416314393
+    }
+  },
+  {
+    "name": "The Glassway",
+    "difficulties": {
+      "adept": 3812135455,
+      "hero": 3812135452,
+      "legend": 3812135453,
+      "master": 3812135450,
+      "grandmaster": 3812135451
+    }
+  },
+  {
+    "name": "Warden of Nothing",
+    "difficulties": {
+      "adept": 4196944360,
+      "hero": 4196944363,
+      "legend": 4196944362,
+      "master": 4196944365,
+      "grandmaster": 4196944364
+    }
+  }
+]

@@ -19,6 +19,9 @@ model Manifest {
 model Activity {
   hash Int @id @db.UnsignedInt
   name String? @db.Text
+  detailedName String? @db.Text
+  description String? @db.Text
+  lightLevel Int?
   pgcrImage String? @db.Text
   modifiers ActivityModifiersOnActivity[]
   directActivityModeType Int?
@@ -71,8 +74,17 @@ model Collectible {
 }
 
 model Vendor {
-  hash BigInt @id
-  data Json @default("{}")
+  hash Int @id @db.UnsignedInt
+  name String? @db.Text
+  description String? @db.Text
+  icon String? @db.Text
+  hasIcon Boolean? @default(false)
+  largeIcon String? @db.Text
+  mapIcon String? @db.Text
+  specialImage String? @db.Text
+  redacted Boolean? @default(false)
+  blacklisted Boolean? @default(false)
+
 }
 
 model Stat {
@@ -116,8 +128,8 @@ model InventoryItem {
   index Int?
   redacted Boolean? @default(false)
   blacklisted Boolean? @default(false)
+  summaryItemHash Int? @db.UnsignedInt
   collectible Collectible[]
-
   stats StatsOnInventoryItem[]
 }
 

@@ -43,6 +43,7 @@ const populateInventoryItemDefs = async (url: string) => {
         index: definition.index,
         redacted: definition.redacted,
         blacklisted: definition.blacklisted,
+        summaryItemHash: definition.summaryItemHash,
       };
 
       return data;

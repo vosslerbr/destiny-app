@@ -1,0 +1,26 @@
+{
+  "1676394000": {
+    "name": "The Glassway",
+    "difficulties": {
+      "adept": 3812135455,
+      "hero": 3812135452,
+      "legend": 3812135453,
+      "master": 3812135450,
+      "grandmaster": 3812135451
+    },
+    "startsAt": 1676394000,
+    "endsAt": 1676998800
+  },
+  "1676998800": {
+    "name": "Warden of Nothing",
+    "difficulties": {
+      "adept": 4196944360,
+      "hero": 4196944363,
+      "legend": 4196944362,
+      "master": 4196944365,
+      "grandmaster": 4196944364
+    },
+    "startsAt": 1676998800,
+    "endsAt": 1677603600
+  }
+}

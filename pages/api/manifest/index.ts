@@ -5,6 +5,7 @@ import populateClassDefs from "@/helpers/manifestPopulation/classDefs";
 import populateCollectibleDefs from "@/helpers/manifestPopulation/collectibleDefs";
 import populateInventoryItemDefs from "@/helpers/manifestPopulation/inventoryItemDefs";
 import populateStatDefs from "@/helpers/manifestPopulation/statDefs";
+import populateVendorDefs from "@/helpers/manifestPopulation/vendorDefs";
 import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -45,37 +46,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   });
 
-  // const tablesNeeded = [
-  //   // {
-  //   //   name: "Activity",
-  //   //   model: "activityDefinition",
-  //   // },
-  //   // {
-  //   //   name: "ActivityModifier",
-  //   //   model: "activityModifierDefinition",
-  //   // },
-  //   // {
-  //   //   name: "Collectible",
-  //   //   model: "collectibleDefinition",
-  //   // },
-  //   {
-  //     name: "InventoryItem",
-  //     model: "inventoryItemDefinition",
-  //   },
-  //   // {
-  //   //   name: "Class",
-  //   //   model: "classDefinition",
-  //   // },
-  //   {
-  //     name: "Vendor",
-  //     model: "vendorDefinition",
-  //   },
-  //   // {
-  //   //   name: "Stat",
-  //   //   model: "statDefinition",
-  //   // },
-  // ];
-
   const {
     DestinyClassDefinition,
     DestinyStatDefinition,
@@ -83,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     DestinyActivityDefinition,
     DestinyInventoryItemDefinition,
     DestinyCollectibleDefinition,
+    DestinyVendorDefinition,
   }: {
     DestinyClassDefinition: string;
     DestinyStatDefinition: string;
@@ -90,6 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     DestinyActivityDefinition: string;
     DestinyInventoryItemDefinition: string;
     DestinyCollectibleDefinition: string;
+    DestinyVendorDefinition: string;
   } = manifestResJson.Response.jsonWorldComponentContentPaths.en;
 
   await populateClassDefs(DestinyClassDefinition);
@@ -99,6 +71,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await populateActivityModifierJoins(DestinyActivityDefinition);
   await populateInventoryItemDefs(DestinyInventoryItemDefinition);
   await populateCollectibleDefs(DestinyCollectibleDefinition);
+  await populateVendorDefs(DestinyVendorDefinition);
 
   res.status(200).json({ name: "John Doe" });
 }

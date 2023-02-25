@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,700,900");
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
@@ -79,12 +81,11 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(18, 24, 38);
+  background: rgb(16, 19, 27);
 }
 
 a {
@@ -104,28 +105,73 @@ body {
   margin: 0 1rem;
 }
 
+nav {
+  padding: 1rem 0;
+  position: sticky;
+  top: 0px;
+  background: rgba(16, 19, 27, 0.75);
+  z-index: 1;
+  backdrop-filter: blur(4px);
+}
+
+#nav-inner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 main {
   max-width: 1200px;
   margin: 2rem auto;
 }
 
 .activity-card,
-.xur-card {
-  background: rgb(26, 35, 55);
+.xur-card,
+.activity-card-detail {
+  background: rgb(24, 26, 37);
   padding: 2rem;
   border-radius: 5px;
   margin-bottom: 4rem;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.activity-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 2rem;
+.activity-card,
+.activity-card-detail {
+  padding: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.loading-container {
+  padding: 2rem;
+  text-align: center;
+}
+
+.activity-card-inner {
+  background-color: rgb(18 24 38 / 34%);
+  backdrop-filter: blur(4px);
+  padding: 2rem;
+  width: max-content;
+  max-width: 65%;
+  border-radius: 5px 0 0 5px;
 }
 
 .xur-card {
   text-align: center;
+}
+
+h1 {
+  font-size: 3.5rem;
+}
+
+.activity-card-detail h2 {
+  opacity: 0.5;
+  font-style: italic;
+  margin-bottom: 2rem;
 }
 
 .xur-card h2 {
@@ -141,7 +187,7 @@ main {
 .activity-card h3,
 .xur-card h3 {
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: 300;
   opacity: 0.5;
 }
 
@@ -157,7 +203,7 @@ main {
 .activity-metadata {
   display: flex;
   flex-direction: column;
-  margin: 0 0 2rem 0;
+  margin: 0 0 1rem 0;
 }
 
 .activity-metadata:last-child {
@@ -165,18 +211,14 @@ main {
 }
 
 .activity-metadata h4 {
-  font-weight: 400;
+  font-weight: 300;
   opacity: 0.5;
   margin-bottom: 0.5rem;
 }
 
 .activity-metadata img {
   margin-right: 1rem;
-  margin-bottom: 1rem;
-}
-
-.reward-image {
-  cursor: pointer;
+  margin-bottom: 0.5rem;
 }
 
 .modal-image-container {
@@ -194,6 +236,88 @@ main {
   margin-right: 0;
 }
 
+.activity-rewards-detail h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.activity-rewards-detail-inner {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 1rem;
+}
+
+.reward-card {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgb(24, 26, 37);
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.reward-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.reward-card h3 {
+  margin-bottom: 0.5rem;
+}
+.reward-card-header p {
+  opacity: 0.5;
+}
+.reward-card-body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.reward-card-body img {
+  object-fit: cover;
+  position: relative !important;
+}
+
+.reward-unlock-detail {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  margin-top: 2rem;
+}
+
+.reward-unlock-detail span {
+  width: 100%;
+  background-color: gray;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+/* TODO make these into classes */
+.reward-unlock-detail .yes {
+  border: 2px solid rgb(50, 204, 117);
+  background-color: transparent;
+  color: rgb(50, 204, 117);
+}
+
+.reward-unlock-detail .no {
+  border: 2px solid rgb(204, 50, 50);
+  background-color: transparent;
+  color: rgb(204, 50, 50);
+}
+
+.reward-unlock-prompt {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.reward-unlock-prompt p {
+  opacity: 0.5;
+}
+
 @media screen and (max-width: 890px) {
   body {
     margin: 0 0.5rem;
@@ -203,19 +327,20 @@ main {
     margin: 1rem auto;
   }
 
-  .activity-card {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 1rem;
-  }
-
   .activity-card h2 {
     font-size: 1.5rem;
   }
 
+  .activity-card-inner {
+    padding: 1rem;
+    max-width: none;
+    width: 100%;
+    border-radius: 5px;
+  }
+
   .activity-metadata img {
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     margin-right: 0.75rem;
   }
 

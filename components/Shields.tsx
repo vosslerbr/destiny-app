@@ -1,14 +1,19 @@
 import { Tooltip } from "@mui/material";
+import { ActivityModifier, ActivityModifiersOnActivity } from "@prisma/client";
 import Image from "next/image";
 
 interface LSModifiersProps {
-  modifiers: any[];
+  modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
 }
 
-export default function LSShields({ modifiers }: LSModifiersProps) {
+export default function Shields({ modifiers }: LSModifiersProps) {
   const shieldsObject = modifiers.find((modifier: any) => {
     return modifier.activityModifier.name === "Shielded Foes";
   });
+
+  if (!shieldsObject) {
+    return <></>;
+  }
 
   const { description } = shieldsObject.activityModifier;
 
@@ -16,13 +21,13 @@ export default function LSShields({ modifiers }: LSModifiersProps) {
   let match: RegExpExecArray | null;
   let shieldTypes: string[] = [];
 
-  while ((match = regex.exec(description)) !== null) {
+  while ((match = regex.exec(description ?? "")) !== null) {
     shieldTypes.push(match[1]);
   }
 
   const shields = shieldTypes.map((shieldType: string) => {
     return (
-      <Tooltip title={shieldType} key={`${shieldType}_tooltip`}>
+      <Tooltip title={shieldType} key={`${shieldType}_tooltip`} arrow>
         <Image
           src={`/${shieldType.toLowerCase()}.png`}
           alt={shieldType}

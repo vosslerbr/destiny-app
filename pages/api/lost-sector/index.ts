@@ -88,5 +88,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
 
   // return the data
-  res.status(200).json({ lostSector: lostSectorData });
+  res.status(200).json(lostSectorData);
 }
