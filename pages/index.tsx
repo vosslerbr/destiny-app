@@ -3,8 +3,39 @@ import LostSectorSummary from "@/components/LostSectorSummary";
 import XurSummary from "@/components/XurSummary";
 import NightfallSummary from "@/components/NightfallSummary";
 import GrandmasterSummary from "@/components/GrandmasterSummary";
+import { NextPageWithLayout } from "./_app";
+import { ReactElement, useEffect } from "react";
+import Layout from "@/components/Layout";
+import { useRouter } from "next/router";
 
-export default function Home() {
+const Home: NextPageWithLayout = () => {
+  // when page loads, we need to check for a 'code' query param
+  const router = useRouter();
+
+  const getToken = async () => {
+    const code = router.query.code;
+
+    if (!code) {
+      return;
+    }
+
+    const response = await fetch("/api/login/get-token", {
+      method: "POST",
+      body: JSON.stringify({ code }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+  };
+
+  useEffect(() => {
+    getToken();
+  }, [router.query.code]);
+
   return (
     <>
       <Head>
@@ -21,4 +52,10 @@ export default function Home() {
       </main>
     </>
   );
-}
+};
+
+Home.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
+
+export default Home;
