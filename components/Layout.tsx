@@ -33,10 +33,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <p onClick={handleLogout}>Log Out</p>
             ) : (
               <a
-                href={
-                  "https://www.bungie.net/en/oauth/authorize?client_id=38608&response_type=code"
-                }
-                target="_blank"
+                href={`https://www.bungie.net/en/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_BUNGIE_APP_CLIENT_ID}&response_type=code`}
+                // target="_blank"
                 rel="noreferrer">
                 Log In
               </a>
