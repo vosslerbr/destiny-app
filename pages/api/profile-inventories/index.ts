@@ -11,7 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log("req.body", req.body);
 
   // get membership id from query string
-  const { membershipId, access_token } = req.body;
+  const { membershipType, membershipId, access_token } = req.body;
 
   console.log("membershipId", membershipId);
 
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const config = {
     method: "get",
-    url: `https://www.bungie.net/Platform/Destiny2/1/Profile/${membershipId}/?components=102, 201,800`,
+    url: `https://www.bungie.net/Platform/Destiny2/${membershipType}/Profile/${membershipId}/?components=102, 201,800`,
     headers: {
       "X-API-Key": process.env.BUNGIE_API_KEY!,
       Authorization: `Bearer ${access_token}`,
