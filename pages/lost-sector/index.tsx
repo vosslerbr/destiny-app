@@ -32,7 +32,12 @@ const LostSectorDetail: NextPageWithLayout = () => {
       if (tokenData) {
         const parsedTokenData = JSON.parse(tokenData);
 
+        const membershipType = user.destinyMemberships.find(
+          (membership) => membership.membershipId === user.primaryMembershipId
+        )?.membershipType;
+
         const response = await axios.post("/api/profile-inventories", {
+          membershipType,
           membershipId: user.primaryMembershipId,
           access_token: parsedTokenData.access_token,
         });
