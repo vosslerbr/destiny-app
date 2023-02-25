@@ -1,26 +1,42 @@
 import { Collectible, InventoryItem } from "@prisma/client";
 import Image from "next/image";
 import classTypeMap from "@/helpers/classTypeMap";
+import { useContext } from "react";
+import { UserContext, UserContextType } from "./Store";
+import { Tooltip } from "@mui/material";
 
 interface LSRewardsProps {
   rewards: (Collectible & {
     inventoryItem: InventoryItem;
   })[];
+  userInventory: any[];
+  userCollectibleStates: { [key: string]: { state: number } };
 }
 
-export default function RewardsDetail({ rewards }: LSRewardsProps) {
+export default function RewardsDetail({
+  rewards,
+  userInventory,
+  userCollectibleStates,
+}: LSRewardsProps) {
+  const { user } = useContext(UserContext) as UserContextType;
+
   return (
     <div className="activity-rewards-detail">
       <h2>Rewards</h2>
       <div className="activity-rewards-detail-inner">
-        {rewards.map((reward, index) => {
+        {rewards.map((reward) => {
+          const { hash: collectibleHash } = reward;
           const { icon, name, hash, classType, itemTypeDisplayName, screenshot } =
             reward.inventoryItem;
 
-          const className = typeof classType === "number" ? classTypeMap[classType] : "";
+          const userOwned = userInventory?.filter((item) => item.itemHash === hash);
 
-          const hasInInventory = index === 2 || index === 4;
-          const hasInCollections = index === 1 || index === 2 || index === 3 || index === 4;
+          const collectibleState = userCollectibleStates[collectibleHash];
+
+          // if collectibleState is odd, it's not been acquired
+          const isAcquired = collectibleState?.state % 2 === 0;
+
+          const className = typeof classType === "number" ? classTypeMap[classType] : "";
 
           return (
             <div key={`${hash}_reward_card`} className="reward-card">
@@ -52,10 +68,35 @@ export default function RewardsDetail({ rewards }: LSRewardsProps) {
                 />
               </div>
 
-              <div className="reward-unlock-detail">
-                <span className={hasInCollections ? "yes" : "no"}>Collections</span>
-                <span className={hasInInventory ? "yes" : "no"}>Inventory</span>
-              </div>
+              {user?.primaryMembershipId ? (
+                <div className="reward-unlock-detail">
+                  {isAcquired ? (
+                    <Tooltip title="You've found this item before" arrow>
+                      <span className="yes">Collections</span>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="You haven't found this item yet" arrow>
+                      <span className="no">Collections</span>
+                    </Tooltip>
+                  )}
+
+                  {userOwned?.length > 0 ? (
+                    <Tooltip
+                      title={`You have ${userOwned.length} of these in your inventory`}
+                      arrow>
+                      <span className="yes">Inventory</span>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="You don't own this item" arrow>
+                      <span className="no">Inventory</span>
+                    </Tooltip>
+                  )}
+                </div>
+              ) : (
+                <div className="reward-unlock-prompt">
+                  <p>Log in to see if you own this item</p>
+                </div>
+              )}
             </div>
           );
         })}

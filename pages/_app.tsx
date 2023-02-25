@@ -1,12 +1,21 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { Roboto } from "@next/font/google";
+import { Poppins } from "@next/font/google";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
-import { SessionProvider } from "next-auth/react";
+import Store from "@/components/Store";
+import { createTheme, ThemeProvider } from "@mui/material";
 
-// TODO figure out a way to use Poppins for entire app instead
-const roboto = Roboto({
+const theme = createTheme({
+  typography: {
+    fontFamily: `"Poppins", "Helvetica", "Arial", sans-serif`,
+    fontSize: 14,
+    fontWeightRegular: 300,
+    fontWeightBold: 700,
+  },
+});
+
+const poppins = Poppins({
   weight: ["400", "700", "900"],
   subsets: ["latin"],
 });
@@ -20,16 +29,15 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-}: AppPropsWithLayout) {
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <div className={roboto.className}>
-      <SessionProvider session={session}>{getLayout(<Component {...pageProps} />)}</SessionProvider>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Store>
+        <div className={poppins.className}>{getLayout(<Component {...pageProps} />)}</div>
+      </Store>
+    </ThemeProvider>
   );
 }

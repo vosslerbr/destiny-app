@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
-import qs from "qs";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -20,11 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const data = qs.stringify({
-    // eslint-disable-next-line
+  const queryParams = new URLSearchParams({
     grant_type: "authorization_code",
     code,
   });
+
+  console.log("queryParams: ", queryParams);
 
   const config = {
     method: "post",
@@ -36,12 +36,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       username: process.env.BUNGIE_APP_CLIENT_ID!,
       password: process.env.BUNGIE_APP_CLIENT_SECRET!,
     },
-    data: data,
+    data: queryParams.toString(),
   };
 
   console.log("config", config);
 
   const { data: response } = await axios(config);
+
+  // console.log("data: ", response);
 
   res.status(200).json(response);
 }
