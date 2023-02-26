@@ -3,12 +3,10 @@ import Layout from "@/components/Layout";
 import Modifiers from "@/components/Modifiers";
 import RewardsDetail from "@/components/RewardsDetail";
 import Shields from "@/components/Shields";
-import { UserContext, UserContextType } from "@/components/Store";
 import { LostSectorData } from "@/global";
 import fetcher from "@/helpers/fetcher";
 import { CircularProgress } from "@mui/material";
-import axios from "axios";
-import { ReactElement, useContext, useEffect, useState } from "react";
+import { ReactElement } from "react";
 import useSWR from "swr";
 import { NextPageWithLayout } from "../_app";
 
@@ -17,40 +15,6 @@ const LostSectorDetail: NextPageWithLayout = () => {
     "/api/lost-sector",
     fetcher
   );
-  const { user } = useContext(UserContext) as UserContextType;
-  const [userInventories, setUserInventories] = useState<any[]>([]);
-  const [userCollectibleStates, setUserCollectibleStates] = useState<any>({});
-
-  useEffect(() => {
-    if (!user.primaryMembershipId) {
-      return;
-    }
-
-    const getUserInventories = async () => {
-      const tokenData = localStorage.getItem("tokenData");
-
-      if (tokenData) {
-        const parsedTokenData = JSON.parse(tokenData);
-
-        const membershipType = user.destinyMemberships.find(
-          (membership) => membership.membershipId === user.primaryMembershipId
-        )?.membershipType;
-
-        const response = await axios.post("/api/profile-inventories", {
-          membershipType,
-          membershipId: user.primaryMembershipId,
-          access_token: parsedTokenData.access_token,
-        });
-
-        const { data } = response;
-
-        setUserInventories(data.combinedInventory);
-        setUserCollectibleStates(data.collectibleStates);
-      }
-    };
-
-    getUserInventories();
-  }, [user]);
 
   return (
     <main>
@@ -72,11 +36,7 @@ const LostSectorDetail: NextPageWithLayout = () => {
               <Modifiers modifiers={lostSectorData.modifiers} />
             </div>
           </div>
-          <RewardsDetail
-            rewards={lostSectorData.rewards}
-            userInventory={userInventories}
-            userCollectibleStates={userCollectibleStates}
-          />
+          <RewardsDetail rewards={lostSectorData.rewards} />
         </>
       ) : (
         <CircularProgress />

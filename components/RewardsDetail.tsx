@@ -1,24 +1,58 @@
 import { Collectible, InventoryItem } from "@prisma/client";
 import Image from "next/image";
 import classTypeMap from "@/helpers/classTypeMap";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext, UserContextType } from "./Store";
-import { Tooltip } from "@mui/material";
+import { LinearProgress, Tooltip } from "@mui/material";
+import axios from "axios";
 
 interface LSRewardsProps {
   rewards: (Collectible & {
     inventoryItem: InventoryItem;
   })[];
-  userInventory: any[];
-  userCollectibleStates: { [key: string]: { state: number } };
 }
 
-export default function RewardsDetail({
-  rewards,
-  userInventory,
-  userCollectibleStates,
-}: LSRewardsProps) {
+export default function RewardsDetail({ rewards }: LSRewardsProps) {
   const { user } = useContext(UserContext) as UserContextType;
+
+  const [userInventory, setUserInventory] = useState<any[]>([]);
+  const [userCollectibleStates, setUserCollectibleStates] = useState<any>({});
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (!user.primaryMembershipId) {
+      setIsLoading(false);
+
+      return;
+    }
+
+    const getUserInventories = async () => {
+      const tokenData = localStorage.getItem("tokenData");
+
+      if (tokenData) {
+        const parsedTokenData = JSON.parse(tokenData);
+
+        const membershipType = user.destinyMemberships.find(
+          (membership) => membership.membershipId === user.primaryMembershipId
+        )?.membershipType;
+
+        const response = await axios.post("/api/profile-inventories", {
+          membershipType,
+          membershipId: user.primaryMembershipId,
+          access_token: parsedTokenData.access_token,
+        });
+
+        const { data } = response;
+
+        setUserInventory(data.combinedInventory);
+        setUserCollectibleStates(data.collectibleStates);
+      }
+
+      setIsLoading(false);
+    };
+
+    getUserInventories();
+  }, [user]);
 
   return (
     <div className="activity-rewards-detail">
@@ -68,7 +102,13 @@ export default function RewardsDetail({
                 />
               </div>
 
-              {user?.primaryMembershipId ? (
+              {isLoading ? (
+                <LinearProgress
+                  sx={{
+                    marginTop: "1rem",
+                  }}
+                />
+              ) : user?.primaryMembershipId ? (
                 <div className="reward-unlock-detail">
                   {isAcquired ? (
                     <Tooltip title="You've found this item before" arrow>
