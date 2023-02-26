@@ -1,0 +1,15 @@
+# .github/workflows/scheduled-builds.yml
+name: Trigger manifest update
+
+on:
+  schedule:
+    # Every 15 min
+    - cron: '0/15 * * * *'
+jobs:
+  build:
+    name: Trigger manifest update
+    runs-on: ubuntu-latest
+    steps:
+      - name: cURL request
+        # Hit the webhook endpoint to rebuild  from the "main" branch
+        run: curl -X GET -d {} https://destiny-app-sandy.vercel.app/api/manifest
