@@ -1,0 +1,7 @@
+:root {
+  --main-dark-gray: rgb(16, 19, 27);
+  --main-med-gray: rgb(24, 26, 37);
+  --main-light-gray: rgb(32, 35, 46);
+  --main-max-width: 1200px;
+  --main-box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}

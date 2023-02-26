@@ -1,0 +1,39 @@
+nav {
+  padding: 1rem 0;
+  position: sticky;
+  top: 0px;
+  background: rgba(16, 19, 27, 0.75);
+  z-index: 1;
+  backdrop-filter: blur(4px);
+}
+
+#nav-inner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--main-max-width);
+  margin: 0 auto;
+}
+
+.login-container span,
+.login-container a {
+  background: var(--main-med-gray);
+  box-shadow: var(--main-box-shadow);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.15s ease-in-out;
+}
+
+.login-container svg {
+  margin-bottom: -6px;
+}
+
+.login-container span:hover,
+.login-container a:hover {
+  background: var(--main-light-gray);
+}
