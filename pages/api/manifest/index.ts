@@ -1,11 +1,4 @@
-import populateActivityDefs from "@/helpers/manifestPopulation/activityDefs";
-import populateActivityModifierDefs from "@/helpers/manifestPopulation/activityModifierDefs";
-import populateActivityModifierJoins from "@/helpers/manifestPopulation/activityModifierJoins";
-import populateClassDefs from "@/helpers/manifestPopulation/classDefs";
-import populateCollectibleDefs from "@/helpers/manifestPopulation/collectibleDefs";
-import populateInventoryItemDefs from "@/helpers/manifestPopulation/inventoryItemDefs";
-import populateStatDefs from "@/helpers/manifestPopulation/statDefs";
-import populateVendorDefs from "@/helpers/manifestPopulation/vendorDefs";
+import startUpdate from "@/helpers/manifestPopulation/startUpdate";
 import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -46,34 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   });
 
+  startUpdate(manifestResJson);
+
   res.status(200).json({ message: "Manifest is being updated", success: true });
-
-  const {
-    DestinyClassDefinition,
-    DestinyStatDefinition,
-    DestinyActivityModifierDefinition,
-    DestinyActivityDefinition,
-    DestinyInventoryItemDefinition,
-    DestinyCollectibleDefinition,
-    DestinyVendorDefinition,
-  }: {
-    DestinyClassDefinition: string;
-    DestinyStatDefinition: string;
-    DestinyActivityModifierDefinition: string;
-    DestinyActivityDefinition: string;
-    DestinyInventoryItemDefinition: string;
-    DestinyCollectibleDefinition: string;
-    DestinyVendorDefinition: string;
-  } = manifestResJson.Response.jsonWorldComponentContentPaths.en;
-
-  await populateClassDefs(DestinyClassDefinition);
-  await populateStatDefs(DestinyStatDefinition);
-  await populateActivityModifierDefs(DestinyActivityModifierDefinition);
-  await populateActivityDefs(DestinyActivityDefinition);
-  await populateActivityModifierJoins(DestinyActivityDefinition);
-  await populateInventoryItemDefs(DestinyInventoryItemDefinition);
-  await populateCollectibleDefs(DestinyCollectibleDefinition);
-  await populateVendorDefs(DestinyVendorDefinition);
-
-  console.log("Manifest updated");
 }
