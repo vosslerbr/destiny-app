@@ -105,24 +105,6 @@ body {
   margin: 0 1rem;
 }
 
-nav {
-  padding: 1rem 0;
-  position: sticky;
-  top: 0px;
-  background: rgba(16, 19, 27, 0.75);
-  z-index: 1;
-  backdrop-filter: blur(4px);
-}
-
-#nav-inner {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 main {
   max-width: 1200px;
   margin: 2rem auto;
@@ -264,9 +246,7 @@ h1 {
   align-items: center;
   margin-bottom: 2rem;
 }
-.reward-card h3 {
-  margin-bottom: 0.5rem;
-}
+
 .reward-card-header p {
   opacity: 0.5;
 }
