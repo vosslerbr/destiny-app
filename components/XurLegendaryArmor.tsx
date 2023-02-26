@@ -1,7 +1,7 @@
 import { Tooltip } from "@mui/material";
 import Image from "next/image";
 
-export default function XurLegendaryArmor({ items }: any) {
+export default function XurLegendaryArmor({ items }: { items: any[] }) {
   return (
     <div className="rewards-container activity-metadata">
       <h4>Legendary Armor</h4>
@@ -10,11 +10,11 @@ export default function XurLegendaryArmor({ items }: any) {
           .filter((item: any) => {
             return item.itemTier === "Legendary Gear" && item.itemType === "Armor";
           })
-          .map((item: any) => {
+          .map((item: any, index) => {
             const { icon, name } = item;
 
             return (
-              <Tooltip title={name} key={`${name}_tooltip`} arrow>
+              <Tooltip title={name} key={`${name}_tooltip_${index}`} arrow>
                 <Image
                   src={`https://www.bungie.net${icon}`}
                   alt={name || "Reward"}

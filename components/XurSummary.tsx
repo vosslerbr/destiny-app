@@ -31,15 +31,11 @@ export default function XurSummary() {
       const res = await fetch("/api/xur");
       const data = await res.json();
 
-      console.log(data);
-
       setXurData(data);
     };
 
     // xur is only around from Friday reset to Tuesday reset
     const now = dayjs.utc();
-
-    console.log(now.day());
 
     const friday = 5;
     const tuesday = 2;

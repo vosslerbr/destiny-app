@@ -57,8 +57,6 @@ export default function Store({ children }: Props) {
 
         // if no token, do nothing
         if (!tokenData) {
-          console.log("no token, do nothing");
-
           return;
         }
 
@@ -71,10 +69,7 @@ export default function Store({ children }: Props) {
         const isExpired = now > expiresAt;
 
         if (!isExpired) {
-          console.log("not expired");
-
           // not expired, fetch user data
-          console.log("Not expired, fetching user data");
 
           if (!user.primaryMembershipId) {
             getMemberships(parsedTokenData.access_token);
@@ -82,8 +77,6 @@ export default function Store({ children }: Props) {
 
           return;
         }
-
-        console.log("IS EXPIRED");
 
         // if expired send a request to refresh the token
         const response = await axios.post("/api/auth/refresh-token", {
@@ -98,8 +91,6 @@ export default function Store({ children }: Props) {
         const newExpiresAt = JSON.stringify(data.expires_in * 1000 + new Date().getTime());
 
         localStorage.setItem("expiresAt", newExpiresAt);
-
-        console.log("Refreshed, fetching user data");
 
         if (!user.primaryMembershipId) {
           getMemberships(parsedTokenData.access_token);
@@ -124,15 +115,11 @@ export default function Store({ children }: Props) {
 
       localStorage.setItem("expiresAt", expiresAt);
 
-      console.log("Not expired, fetching user data");
-
       if (!user.primaryMembershipId) {
         getMemberships(data.access_token);
       }
 
       router.push("/");
-
-      console.log(data);
     };
 
     getToken();

@@ -95,8 +95,10 @@ export default function RewardsDetail({ rewards }: LSRewardsProps) {
               <div className="reward-card-body">
                 <Image
                   src={`https://www.bungie.net${screenshot}`}
+                  blurDataURL={`https://www.bungie.net${screenshot}`}
                   alt={name || "screenshot"}
                   fill={true}
+                  sizes="(max-width: 890px) 100vw, 600px"
                   key={`${name}_image`}
                   className="image-rounded reward-image"
                 />
