@@ -28,7 +28,7 @@ const LostSectorDetail: NextPageWithLayout = () => {
             <div className="activity-card-inner">
               <div>
                 <h1>{lostSectorData.name}</h1>
-                <h2>Location, Place</h2>
+                {/* <h2>Location, Place</h2> */}
               </div>
 
               <Shields modifiers={lostSectorData.modifiers} />
