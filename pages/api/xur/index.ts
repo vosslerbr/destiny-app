@@ -62,6 +62,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       : null;
 
     const formattedItem: {
+      hash: number;
+      collectibleHash: number | null;
       name: string;
       description: string;
       icon: string;
@@ -69,8 +71,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       itemTypeAndTier: string;
       itemType: string;
       itemTier: string;
-      stats: any[];
+      classType: number | null;
+      stats: any;
     } = {
+      hash: inventoryItem.hash,
+      collectibleHash: inventoryItem.collectibleHash,
       name: inventoryItem.name || "",
       description: inventoryItem.description || "",
       icon: inventoryItem.icon || "",
@@ -81,10 +86,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           ? itemTypeMap[inventoryItem.itemType].singular
           : "",
       itemTier: summaryInventoryItem?.name || "",
-      stats: [],
+      classType: inventoryItem.classType,
+      stats: {},
     };
-
-    // TODO stats
 
     items.push(formattedItem);
     unformattedItems.push(inventoryItem);

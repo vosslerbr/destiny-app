@@ -11,8 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // get code from body
   const { code } = req.body;
 
-  console.log("code", code);
-
   if (!code) {
     res.status(400).send("Missing code");
 
@@ -23,8 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     grant_type: "authorization_code",
     code,
   });
-
-  console.log("queryParams: ", queryParams);
 
   const config = {
     method: "post",
@@ -39,11 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     data: queryParams.toString(),
   };
 
-  console.log("config", config);
-
   const { data: response } = await axios(config);
-
-  // console.log("data: ", response);
 
   res.status(200).json(response);
 }

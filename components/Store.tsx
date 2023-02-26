@@ -8,9 +8,12 @@ import { useRouter } from "next/router";
 
 export type UserContextType = {
   user: {
-    primaryMembershipId: string;
     destinyMemberships: any[];
+    primaryMembershipId: string;
     bungieNetUser: any;
+    responseMintedTimestamp: string;
+    secondaryComponentsMintedTimestamp: string;
+    characters: any;
   };
 };
 
@@ -93,7 +96,7 @@ export default function Store({ children }: Props) {
         localStorage.setItem("expiresAt", newExpiresAt);
 
         if (!user.primaryMembershipId) {
-          getMemberships(parsedTokenData.access_token);
+          getMemberships(data.access_token);
         }
 
         return;

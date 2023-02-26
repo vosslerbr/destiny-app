@@ -53,7 +53,7 @@ const populateInventoryItemDefs = async (url: string) => {
     const chunks = _.chunk(itemsArray, 2000);
 
     for (const chunk of chunks) {
-      console.log("chunk", chunk.length);
+      console.log("inventory items chunk", chunk.length);
 
       await prisma.inventoryItem.createMany({
         data: chunk,

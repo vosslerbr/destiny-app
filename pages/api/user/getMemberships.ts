@@ -11,15 +11,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // get code from body
   const { access_token } = req.body;
 
-  console.log("access_token", access_token);
-
   if (!access_token) {
     res.status(400).send("Missing access_token");
 
     return;
   }
 
-  const config = {
+  // get user memberships
+  const membershipConfig = {
     method: "get",
     url: "https://www.bungie.net/Platform/User/GetMembershipsForCurrentUser/",
     headers: {
@@ -28,11 +27,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   };
 
-  console.log("config", config);
+  const { data: response } = await axios(membershipConfig);
 
-  const { data: response } = await axios(config);
+  const data = response.Response;
 
-  // console.log("data: ", response);
+  const membershipType = data.destinyMemberships.find(
+    (membership: any) => membership.membershipId === data.primaryMembershipId
+  )?.membershipType;
 
-  res.status(200).json(response.Response);
+  // get profile and character data
+  const profileConfig = {
+    method: "get",
+    url: `https://www.bungie.net/Platform/Destiny2/${membershipType}/Profile/${data.primaryMembershipId}/?components=200`,
+    headers: {
+      "X-API-Key": process.env.BUNGIE_API_KEY!,
+      Authorization: `Bearer ${access_token}`,
+    },
+  };
+
+  const profileResponse = await axios(profileConfig);
+
+  const profileData = profileResponse.data.Response;
+
+  // combine data
+  const combinedData = {
+    ...data,
+    ...profileData,
+  };
+
+  res.status(200).json(combinedData);
 }

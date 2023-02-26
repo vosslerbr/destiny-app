@@ -2,6 +2,7 @@
   "extends": "next/core-web-vitals",
   "rules": {
     "spaced-comment": 2,
-    "no-unused-vars": 2
+    "no-unused-vars": 2,
+    "react-hooks/exhaustive-deps": 0
   }
 }

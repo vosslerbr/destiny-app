@@ -8,6 +8,7 @@ import CardLoading from "./CardLoading";
 import utc from "dayjs/plugin/utc";
 import Link from "next/link";
 import { Tooltip } from "@mui/material";
+import axios from "axios";
 
 dayjs.extend(utc);
 
@@ -28,8 +29,8 @@ export default function XurSummary() {
     // TODO try catch?
 
     const getXurData = async () => {
-      const res = await fetch("/api/xur");
-      const data = await res.json();
+      const res = await axios.get("/api/xur");
+      const data = res.data;
 
       setXurData(data);
     };

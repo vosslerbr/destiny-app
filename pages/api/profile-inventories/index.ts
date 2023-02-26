@@ -8,12 +8,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  console.log("req.body", req.body);
-
   // get membership id from query string
   const { membershipType, membershipId, access_token } = req.body;
-
-  console.log("membershipId", membershipId);
 
   if (!membershipId) {
     res.status(400).send("Missing membershipId");
@@ -30,8 +26,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   };
 
-  console.log("config", config);
-
   const response = await axios(config);
 
   const data = response.data.Response;
@@ -47,8 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
 
   const collectibleStates = data.characterCollectibles.data[characterIds[0]].collectibles;
-
-  // console.log("data: ", response);
 
   res.status(200).json({ combinedInventory, collectibleStates });
 }

@@ -8,12 +8,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  console.log("req.body", req.body);
-
   // get code from body
   const { refresh_token } = req.body;
-
-  console.log("refresh_token", refresh_token);
 
   if (!refresh_token) {
     res.status(400).send("Missing refresh_token");
@@ -25,8 +21,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     grant_type: "refresh_token",
     refresh_token,
   });
-
-  console.log("queryParams: ", queryParams);
 
   const config = {
     method: "post",
@@ -41,11 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     data: queryParams.toString(),
   };
 
-  console.log("config", config);
-
   const { data: response } = await axios(config);
-
-  // console.log("data: ", response);
 
   res.status(200).json(response);
 }

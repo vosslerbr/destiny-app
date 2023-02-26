@@ -1,6 +1,8 @@
 import "@/styles/variables.css";
 import "@/styles/globals.css";
 import "@/styles/nav.css";
+import "@/styles/charSelect.css";
+import "@/styles/xurDetail.css";
 
 import type { AppProps } from "next/app";
 import { Poppins } from "@next/font/google";
