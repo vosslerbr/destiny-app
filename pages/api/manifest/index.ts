@@ -11,7 +11,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
-    res.status(405).send("Method not allowed");
+    res.status(405).json({ message: "Method not allowed", success: false });
 
     return;
   }
@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (manifestRecord) {
     console.log("Manifest is up to date");
 
-    res.status(200).json({ name: "John Doe" });
+    res.status(200).json({ message: "Manifest is up to date", success: true });
 
     return;
   }
@@ -73,5 +73,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   await populateCollectibleDefs(DestinyCollectibleDefinition);
   await populateVendorDefs(DestinyVendorDefinition);
 
-  res.status(200).json({ name: "John Doe" });
+  res.status(200).json({ message: "Manifest has been checked and/or updated", success: true });
 }

@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/manifest",
+      "schedule": "*/15 * * * *"
+    }
+  ]
+}
