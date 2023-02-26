@@ -35,6 +35,8 @@ const populateVendorDefs = async (url: string) => {
     await prisma.vendor.createMany({
       data: vendorsArray,
     });
+
+    console.log("Vendor defs populated");
   } catch (error) {
     console.error(error);
   }

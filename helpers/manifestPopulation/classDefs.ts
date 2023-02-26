@@ -33,6 +33,8 @@ const populateClassDefs = async (url: string) => {
     await prisma.class.createMany({
       data: jsonArray,
     });
+
+    console.log("Class defs populated");
   } catch (error) {
     console.error(error);
   }

@@ -34,6 +34,8 @@ const populateActivityModifierDefs = async (url: string) => {
     await prisma.activityModifier.createMany({
       data: jsonArray,
     });
+
+    console.log("Activity modifier defs populated");
   } catch (error) {
     console.error(error);
   }

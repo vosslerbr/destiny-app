@@ -36,6 +36,8 @@ const populateStatDefs = async (url: string) => {
     await prisma.stat.createMany({
       data: jsonArray,
     });
+
+    console.log("Stat defs populated");
   } catch (error) {
     console.error(error);
   }

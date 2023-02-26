@@ -28,6 +28,8 @@ const populateCollectibleDefs = async (url: string) => {
     await prisma.collectible.createMany({
       data: collectiblesArray,
     });
+
+    console.log("Collectible defs populated");
   } catch (error) {
     console.error(error);
   }

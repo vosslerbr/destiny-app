@@ -59,6 +59,8 @@ const populateInventoryItemDefs = async (url: string) => {
         data: chunk,
       });
     }
+
+    console.log("Inventory item defs populated");
   } catch (error) {
     console.error(error);
   }

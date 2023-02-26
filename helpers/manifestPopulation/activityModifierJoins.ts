@@ -55,6 +55,8 @@ const populateActivityModifierJoins = async (url: string) => {
     await prisma.activityModifiersOnActivity.createMany({
       data: activityModifierJoins.flat(),
     });
+
+    console.log("Activity modifier joins populated");
   } catch (error) {
     console.error(error);
   }

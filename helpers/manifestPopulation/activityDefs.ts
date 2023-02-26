@@ -32,6 +32,8 @@ const populateActivityDefs = async (url: string) => {
     await prisma.activity.createMany({
       data: activitiesArray,
     });
+
+    console.log("Activity defs populated");
   } catch (error) {
     console.error(error);
   }
