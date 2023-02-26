@@ -8,6 +8,7 @@ import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
 import Store from "@/components/Store";
 import { createTheme, ThemeProvider } from "@mui/material";
+import { Analytics } from "@vercel/analytics/react";
 
 const theme = createTheme({
   typography: {
@@ -39,7 +40,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <ThemeProvider theme={theme}>
       <Store>
-        <div className={poppins.className}>{getLayout(<Component {...pageProps} />)}</div>
+        <div className={poppins.className}>
+          {getLayout(<Component {...pageProps} />)}
+          <Analytics />
+        </div>
       </Store>
     </ThemeProvider>
   );
