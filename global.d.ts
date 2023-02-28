@@ -1,4 +1,11 @@
-import { ActivityModifier, Collectible } from "@prisma/client";
+import {
+  Activity,
+  ActivityModifier,
+  ActivityModifiersOnActivity,
+  Collectible,
+  InventoryItem,
+  LostSectorDay,
+} from "@prisma/client";
 
 export interface ClassTypeMap {
   [key: number]: string;
@@ -10,19 +17,12 @@ export interface ItemTypeMap {
     plural: string;
   };
 }
-export interface LostSectorScheduleDay {
-  name: string;
-  hash: number;
-  startsAt: number;
-  endsAt: number;
-  rewardName: string;
-}
 
-export interface LostSectorData {
-  name: string;
-  keyArt: string;
-  modifiers: (ActivityModifiersOnActivity & { activityModifier: ActivityModifier })[];
-  rewards: (Collectible & { inventoryItem: InventoryItem })[];
+export interface LostSectorData extends LostSectorDay {
+  activity: {
+    modifiers: Array<ActivityModifiersOnActivity & { activityModifier: ActivityModifier }>;
+  } & Activity;
+  rewards: Array<Collectible & { inventoryItem: InventoryItem }>;
 }
 
 export interface NightfallData {

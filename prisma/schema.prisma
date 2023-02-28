@@ -16,6 +16,16 @@ model Manifest {
   version String
 }
 
+model LostSectorDay {
+  id Int @id @default(autoincrement())
+  name String
+  activity Activity @relation(fields: [activityHash], references: [hash])
+  activityHash Int @db.UnsignedInt
+  startsAt DateTime
+  endsAt DateTime
+  rewards Collectible[]
+}
+
 model Activity {
   hash Int @id @db.UnsignedInt
   name String? @db.Text
@@ -25,6 +35,7 @@ model Activity {
   pgcrImage String? @db.Text
   modifiers ActivityModifiersOnActivity[]
   directActivityModeType Int?
+  lostSectorDays LostSectorDay[]
 }
 
 model ActivityModifier {
@@ -69,6 +80,7 @@ model Collectible {
   sourceHash Int? @db.UnsignedInt
   inventoryItem InventoryItem @relation(fields: [inventoryItemHash], references: [hash])
   inventoryItemHash Int @db.UnsignedInt
+  lostSectorDays LostSectorDay[]
 
   @@index([inventoryItemHash, sourceHash], name: "inventoryItemHash_sourceHash")
 }

@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import dayjs from "dayjs";
+import { Prisma } from "@prisma/client";
+import prisma from "@/lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -16,6 +18,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     "Exotic Chest Armor",
   ];
 
+  const armorCollectibles: {
+    [key: string]: { hash: number }[];
+  } = {
+    "Exotic Helmet": [],
+    "Exotic Leg Armor": [],
+    "Exotic Gauntlets": [],
+    "Exotic Chest Armor": [],
+  };
+
+  const lostSectorSourceHash = 2203185162;
+
+  for (const armor of armorOrder) {
+    const lostSectorCollectibles = await prisma.collectible.findMany({
+      where: {
+        sourceHash: lostSectorSourceHash,
+        inventoryItem: {
+          is: {
+            itemTypeAndTierDisplayName: armor,
+          },
+        },
+      },
+    });
+
+    armorCollectibles[armor] = lostSectorCollectibles.map((collectible) => {
+      return { hash: collectible.hash };
+    });
+  }
+
   const lostSectorOrder = fs.readFileSync(process.cwd() + "/json/LostSectorOrder.json", "utf8");
 
   const lostSectorOrderJson = JSON.parse(lostSectorOrder);
@@ -27,21 +57,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const numberOfDays = lastDayOfSeason.diff(startDate, "day");
 
   // this is the schedule we will build
-  const schedule: { [key: string]: any } = {};
+  const lostSectorDays: Prisma.LostSectorDayCreateInput[] = [];
 
-  let armorIndex = 0;
+  let armorIndex = 2;
   let lostSectorIndex = 0;
 
   // loop through each day of the season
   for (let i = 0; i <= numberOfDays; i++) {
     const resetTimestamp = dayjs().startOf("day").add(11, "hour").unix() + 86400 * i;
 
-    // ends 1 day after reset
-    const endTimestamp = resetTimestamp + 86400;
+    // need resetTimestamp as a date
+    const reset = dayjs.unix(resetTimestamp).toISOString();
+
+    // ends at next reset
+    const nextReset = dayjs.unix(resetTimestamp + 86400).toISOString();
 
     // we only have 4 armor types so  we need to loop through them repeatedly
     const rewardName = armorOrder[armorIndex];
-    const lostSector = lostSectorOrderJson[lostSectorIndex];
+    const lostSector: { name: string; hash: number } = lostSectorOrderJson[lostSectorIndex];
 
     if (armorIndex === 3) {
       armorIndex = 0;
@@ -55,15 +88,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       lostSectorIndex++;
     }
 
-    schedule[resetTimestamp] = {
-      ...lostSector,
-      startsAt: resetTimestamp,
-      endsAt: endTimestamp,
-      rewardName,
+    const lostSectorDay: Prisma.LostSectorDayCreateInput = {
+      startsAt: reset,
+      endsAt: nextReset,
+      name: lostSector.name,
+      activity: {
+        connect: {
+          hash: lostSector.hash,
+        },
+      },
+      rewards: {
+        connect: armorCollectibles[rewardName],
+      },
     };
+
+    lostSectorDays.push(lostSectorDay);
   }
 
-  fs.writeFileSync(process.cwd() + "/json/lostSectorSchedule.json", JSON.stringify(schedule));
+  for (const lostSectorDay of lostSectorDays) {
+    await prisma.lostSectorDay.create({
+      data: lostSectorDay,
+    });
+  }
 
-  res.status(200).send("ok");
+  res.status(200).json({ message: "created lost sector days", success: true });
 }

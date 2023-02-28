@@ -12,7 +12,7 @@ import useSWR from "swr";
 import { NextPageWithLayout } from "../_app";
 
 const LostSectorDetail: NextPageWithLayout = () => {
-  const { data: lostSectorData }: { data: LostSectorData; isLoading: boolean } = useSWR(
+  const { data, isLoading }: { data: LostSectorData; isLoading: boolean } = useSWR(
     "/api/lost-sector",
     fetcher
   );
@@ -20,7 +20,7 @@ const LostSectorDetail: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Lost Sector: {lostSectorData.name}</title>
+        <title>Lost Sector: {data.name}</title>
         <meta
           name="description"
           content="A web app for viewing the latest activity and vendor rotations in Destiny 2"
@@ -29,25 +29,25 @@ const LostSectorDetail: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        {lostSectorData ? (
+        {!isLoading ? (
           <>
             <div
               className="section-card-detail"
               style={{
-                backgroundImage: `url(https://www.bungie.net${lostSectorData.keyArt})`,
+                backgroundImage: `url(https://www.bungie.net${data.activity.pgcrImage})`,
               }}>
               <div className="section-card-inner">
                 <div>
-                  <h1>{lostSectorData.name}</h1>
+                  <h1>{data.name}</h1>
                   {/* <h2>Location, Place</h2> */}
                 </div>
 
-                <Shields modifiers={lostSectorData.modifiers} />
-                <Champions modifiers={lostSectorData.modifiers} />
-                <Modifiers modifiers={lostSectorData.modifiers} />
+                <Shields modifiers={data.activity.modifiers} />
+                <Champions modifiers={data.activity.modifiers} />
+                <Modifiers modifiers={data.activity.modifiers} />
               </div>
             </div>
-            <RewardsDetail rewards={lostSectorData.rewards} />
+            <RewardsDetail rewards={data.rewards} />
           </>
         ) : (
           <CircularProgress />
