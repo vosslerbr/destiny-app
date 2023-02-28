@@ -17,11 +17,11 @@ export default function NightfallSummary() {
     <>
       {nightfallData ? (
         <div
-          className="activity-card"
+          className="section-card"
           style={{
             backgroundImage: `url(https://www.bungie.net${nightfallData.keyart})`,
           }}>
-          <div className="activity-card-inner">
+          <div className="section-card-inner">
             <Tooltip title="View details" placement="left" arrow>
               <Link href="/nightfall">
                 <div>

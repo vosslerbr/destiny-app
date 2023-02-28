@@ -1,5 +1,6 @@
 import itemTypeMap from "@/helpers/itemTypeMap";
 import prisma from "@/lib/prisma";
+import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 // TODO this route is slow, need to figure out how to speed it up. Takes about 6 seconds to load right now
@@ -12,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // fetch the latest Xur info, the manifest doesn't have this info
-  const xurResponse = await fetch(
+  const xurResponse = await axios.get(
     "https://bungie.net/Platform/Destiny2/Vendors/?components=400,402,302,304",
     {
       method: "GET",
@@ -22,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   );
 
-  const xurResJson = await xurResponse.json();
+  const { data: xurResJson } = xurResponse;
 
   const xurSales = xurResJson.Response.sales.data[2190858386].saleItems; // The items Xur is selling
 

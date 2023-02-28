@@ -48,7 +48,7 @@ export default function Champions({ modifiers }: LSModifiersProps) {
   });
 
   return (
-    <div className="champions-container activity-metadata">
+    <div className="champions-container section-metadata">
       <h4>Champions</h4>
       <div>{champions}</div>
     </div>

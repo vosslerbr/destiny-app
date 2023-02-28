@@ -1,5 +1,6 @@
 import startUpdate from "@/helpers/manifestPopulation/startUpdate";
 import prisma from "@/lib/prisma";
+import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,9 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const manifestRes = await fetch(process.env.BUNGIE_MANIFEST_BASE_URL!);
+  const manifestRes = await axios.get(process.env.BUNGIE_MANIFEST_BASE_URL!);
 
-  const manifestResJson = await manifestRes.json();
+  const { data: manifestResJson } = manifestRes;
 
   // TODO uncomment for production
   const version: string = manifestResJson.Response.version;

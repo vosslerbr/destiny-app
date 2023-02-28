@@ -19,11 +19,11 @@ export default function LostSectorSummary() {
     <>
       {lostSectorData ? (
         <div
-          className="activity-card"
+          className="section-card"
           style={{
             backgroundImage: `url(https://www.bungie.net${lostSectorData.keyArt})`,
           }}>
-          <div className="activity-card-inner">
+          <div className="section-card-inner">
             {" "}
             <Tooltip title="View details" placement="left" arrow>
               <Link href="/lost-sector">

@@ -13,8 +13,11 @@ const Home: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Destiny App</title>
-        <meta name="description" content="Destiny Lost Sector App" />
+        <title>Yet Another Destiny App</title>
+        <meta
+          name="description"
+          content="A web app for viewing the latest activity and vendor rotations in Destiny 2"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

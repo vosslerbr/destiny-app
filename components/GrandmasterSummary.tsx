@@ -15,12 +15,12 @@ export default function GrandmasterSummary() {
     <>
       {nightfallData ? (
         <div
-          className="activity-card"
+          className="section-card"
           style={{
             backgroundImage: `url(https://www.bungie.net${nightfallData.keyart})`,
             border: "2px solid #ad8f1e",
           }}>
-          <div className="activity-card-inner">
+          <div className="section-card-inner">
             <Tooltip title="View details" placement="left" arrow>
               <Link href="/grandmaster">
                 <div>

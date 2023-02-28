@@ -26,13 +26,15 @@ export default function XurSummary() {
   const [xurArrival, setXurArrival] = useState<string>("");
 
   useEffect(() => {
-    // TODO try catch?
-
     const getXurData = async () => {
-      const res = await axios.get("/api/xur");
-      const data = res.data;
+      try {
+        const res = await axios.get("/api/xur");
+        const data = res.data;
 
-      setXurData(data);
+        setXurData(data);
+      } catch (err) {
+        console.error("Error loading Xur summary: ", err);
+      }
     };
 
     // xur is only around from Friday reset to Tuesday reset
@@ -87,17 +89,17 @@ export default function XurSummary() {
   return (
     <>
       {!xurIsHere ? (
-        <div className="xur-card">
+        <div className="xur-gone-card">
           <h2>Xur will be back at {resetTime} on Friday</h2>
           <h3>{xurArrival} from now</h3>
         </div>
       ) : xurData && xurIsHere ? (
         <div
-          className="activity-card"
+          className="section-card"
           style={{
             backgroundImage: `url(https://www.bungie.net${xurData.xur.keyart})`,
           }}>
-          <div className="activity-card-inner">
+          <div className="section-card-inner">
             <Tooltip title="View details" placement="left" arrow>
               <Link href="/xur">
                 <div>

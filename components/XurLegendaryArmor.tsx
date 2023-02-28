@@ -20,7 +20,7 @@ export default function XurLegendaryArmor({ items }: { items: any[] }) {
   }, [items]);
 
   return (
-    <div className="rewards-container activity-metadata">
+    <div className="rewards-container section-metadata">
       <h4>Legendary Armor</h4>
 
       {armorSetName && <p>{armorSetName} set</p>}
