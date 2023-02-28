@@ -1,11 +1,12 @@
 import prisma from "@/lib/prisma";
 import { Class } from "@prisma/client";
+import axios from "axios";
 
 const populateClassDefs = async (url: string) => {
   try {
-    const response = await fetch("https://www.bungie.net" + url);
+    const response = await axios.get("https://www.bungie.net" + url);
 
-    const json = await response.json();
+    const { data: json } = response;
 
     await prisma.class.deleteMany({});
 
