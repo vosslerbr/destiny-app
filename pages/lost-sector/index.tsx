@@ -20,7 +20,7 @@ const LostSectorDetail: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>Lost Sector: {data.name}</title>
+        <title>Lost Sector: {data?.name}</title>
         <meta
           name="description"
           content="A web app for viewing the latest activity and vendor rotations in Destiny 2"
