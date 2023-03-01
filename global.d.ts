@@ -11,13 +11,6 @@ export interface ClassTypeMap {
   [key: number]: string;
 }
 
-export interface ItemTypeMap {
-  [key: number]: {
-    singular: string;
-    plural: string;
-  };
-}
-
 export interface LostSectorData extends LostSectorDay {
   activity: {
     modifiers: Array<ActivityModifiersOnActivity & { activityModifier: ActivityModifier }>;

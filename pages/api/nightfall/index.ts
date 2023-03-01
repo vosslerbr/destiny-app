@@ -5,7 +5,7 @@ import prisma from "@/lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
-    res.status(405).send("Method not allowed");
+    res.status(405).json({ message: "Method not allowed", success: false });
 
     return;
   }
@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   );
 
   if (!currentNightfall) {
-    res.status(500).send("Lost sector data not found");
+    res.status(500).json({ message: "Nightfall data not found", success: false });
 
     return;
   }
@@ -97,7 +97,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const name = adeptNightfall?.description;
 
   if (!nightfallActivities.length) {
-    res.status(500).send("Lost sector activity data not found");
+    res.status(500).json({ message: "Nightfall data not found", success: false });
     return;
   }
 

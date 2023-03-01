@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
-    res.status(405).send("Method not allowed");
+    res.status(405).json({ message: "Method not allowed", success: false });
 
     return;
   }
@@ -53,5 +53,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   fs.writeFileSync(process.cwd() + "/json/nightfallSchedule.json", JSON.stringify(schedule));
 
-  res.status(200).send("ok");
+  res.status(200).json({ message: "Nightfall schedule generated", success: true });
 }
