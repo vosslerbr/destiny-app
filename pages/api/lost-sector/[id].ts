@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dayjs from "dayjs";
 import prisma from "@/lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -9,16 +8,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const nowTimestamp = dayjs.unix(dayjs().unix()).toISOString();
+  const { id } = req.query;
 
-  const todaysLostSector = await prisma.lostSectorDay.findFirst({
+  const lostSector = await prisma.lostSectorDay.findUnique({
     where: {
-      startsAt: {
-        lte: nowTimestamp,
-      },
-      endsAt: {
-        gte: nowTimestamp,
-      },
+      id: Number(id),
     },
     include: {
       activity: {
@@ -38,12 +32,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     },
   });
 
-  if (!todaysLostSector) {
-    res.status(500).json({ message: "Lost sector data not found", success: false });
+  if (!lostSector) {
+    res.status(500).json({ message: "Lost sector not found", success: false });
 
     return;
   }
 
   // return the data
-  res.status(200).json(todaysLostSector);
+  res.status(200).json(lostSector);
 }

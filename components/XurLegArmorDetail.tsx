@@ -66,9 +66,9 @@ export default function XurLegArmorDetail({ items }: Props) {
   }, [user]);
 
   return (
-    <div className="activity-rewards-detail">
+    <div className="items-grid">
       <h2>Legendary Armor</h2>
-      <div className="activity-rewards-detail-inner">
+      <div className="items-grid-inner">
         {items
           .filter((item: any) => {
             return item.itemTier === "Legendary Gear" && item.itemType === "Armor";
@@ -98,8 +98,8 @@ export default function XurLegArmorDetail({ items }: Props) {
             const className = typeof classType === "number" ? classTypeMap[classType] : "";
 
             return (
-              <div key={`${hash}_reward_card`} className="reward-card">
-                <div className="reward-card-header">
+              <div key={`${hash}_reward_card`} className="item-card">
+                <div className="item-card-header">
                   <div>
                     <h3>{name}</h3>
                     <p>
@@ -117,7 +117,7 @@ export default function XurLegArmorDetail({ items }: Props) {
                   />
                 </div>
 
-                <div className="reward-card-body">
+                <div className="item-card-body">
                   <Image
                     src={`https://www.bungie.net${screenshot}`}
                     blurDataURL={`https://www.bungie.net${screenshot}`}
@@ -136,29 +136,29 @@ export default function XurLegArmorDetail({ items }: Props) {
                     }}
                   />
                 ) : user?.primaryMembershipId ? (
-                  <div className="reward-unlock-detail">
+                  <div className="item-unlock-detail">
                     {isAcquired ? (
                       <Tooltip title="You've found this item before" arrow>
-                        <span className="yes">Collections</span>
+                        <span className="unlocked">Collections</span>
                       </Tooltip>
                     ) : (
                       <Tooltip title="You haven't found this item yet" arrow>
-                        <span className="no">Collections</span>
+                        <span className="locked">Collections</span>
                       </Tooltip>
                     )}
 
                     {userOwned?.length > 0 ? (
                       <Tooltip title={`You have at least 1 of these in your inventory`} arrow>
-                        <span className="yes">Inventory</span>
+                        <span className="unlocked">Inventory</span>
                       </Tooltip>
                     ) : (
                       <Tooltip title="You don't own this item" arrow>
-                        <span className="no">Inventory</span>
+                        <span className="locked">Inventory</span>
                       </Tooltip>
                     )}
                   </div>
                 ) : (
-                  <div className="reward-unlock-prompt">
+                  <div className="item-unlock-prompt">
                     <p>Log in to see if you own this item</p>
                   </div>
                 )}

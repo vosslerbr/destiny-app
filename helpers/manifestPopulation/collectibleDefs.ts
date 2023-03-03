@@ -1,11 +1,12 @@
 import prisma from "@/lib/prisma";
 import { Collectible } from "@prisma/client";
+import axios from "axios";
 
 const populateCollectibleDefs = async (url: string) => {
   try {
-    const response = await fetch("https://www.bungie.net" + url);
+    const response = await axios.get("https://www.bungie.net" + url);
 
-    const json = await response.json();
+    const { data: json } = response;
 
     // delete all the old records
     await prisma.collectible.deleteMany({});

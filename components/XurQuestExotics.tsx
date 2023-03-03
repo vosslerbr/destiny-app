@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function XurQuestExotics({ items }: any) {
   return (
-    <div className="rewards-container activity-metadata">
+    <div className="rewards-container section-metadata">
       <h4>Quest Exotics</h4>
       <div>
         {items

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Proving Grounds",
+    "difficulties": {
+      "hero": 2103025316,
+      "legend": 2103025317,
+      "master": 2103025314,
+      "grandmaster": 2103025315
+    }
+  },
+  {
+    "name": "Heist Battleground: Mars",
+    "difficulties": {
+      "hero": 507866985,
+      "legend": 507866984,
+      "master": 507866991,
+      "grandmaster": 507866990
+    }
+  },
+  {
+    "name": "HyperNet Current",
+    "difficulties": {
+      "hero": 2039642505,
+      "legend": 2039642504,
+      "master": 2039642511,
+      "grandmaster": 2039642510
+    }
+  },
+  {
+    "name": "The Arms Dealer",
+    "difficulties": {
+      "hero": 1753547898,
+      "legend": 1753547899,
+      "master": 1753547900,
+      "grandmaster": 1753547901
+    }
+  },
+  {
+    "name": "The Glassway",
+    "difficulties": {
+      "hero": 3812135452,
+      "legend": 3812135453,
+      "master": 3812135450,
+      "grandmaster": 3812135451
+    }
+  },
+  {
+    "name": "Lake of Shadows",
+    "difficulties": {
+      "hero": 3109193575,
+      "legend": 3109193574,
+      "master": 3109193569,
+      "grandmaster": 3109193568
+    }
+  }
+]

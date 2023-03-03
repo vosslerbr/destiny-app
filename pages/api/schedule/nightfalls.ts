@@ -1,57 +1,80 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import dayjs from "dayjs";
+import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
-    res.status(405).send("Method not allowed");
+    res.status(405).json({ message: "Method not allowed", success: false });
 
     return;
   }
 
-  const nightfallOrder = fs.readFileSync(process.cwd() + "/json/NightfallOrderS19.json", "utf8");
+  // delete all existing nightfall weeks
+  await prisma.nightfallWeek.deleteMany({});
+
+  const nightfallOrder = fs.readFileSync(process.cwd() + "/json/NightFallOrderS20.json", "utf8");
 
   const nightfallOrderJson = JSON.parse(nightfallOrder);
 
-  const initialDate = dayjs().subtract(1, "week").set("day", 2).startOf("day").add(11, "hour"); // last tuesday
+  const startDate = dayjs("02/28/2023").startOf("day").add(11, "hour"); // The first day we want to start the schedule
 
-  console.log(initialDate.format("MM/DD/YYYY HH:mm:ss"));
-
-  const lastDayOfSeason = dayjs("02/27/2023 11:00:00", "MM/DD/YYYY HH:mm:ss");
+  const lastDayOfSeason = dayjs("05/22/2023 11:00:00", "MM/DD/YYYY HH:mm:ss");
 
   // this how many resets we have in the season
-  const numberOfWeeks = lastDayOfSeason.diff(initialDate, "week");
+  const numberOfWeeks = lastDayOfSeason.diff(startDate, "week");
 
-  // this is the schedule we will build
-  const schedule: { [key: string]: any } = {};
+  const nightfallWeeks: Prisma.NightfallWeekCreateInput[] = [];
 
   // starting index for nightfall
-  let nightfallIndex = 4;
+  let nightfallIndex = 0;
 
   // loop through each day of the season
   for (let i = 0; i <= numberOfWeeks; i++) {
-    const resetTimestamp =
-      dayjs().subtract(1, "week").set("day", 2).startOf("day").add(11, "hour").unix() + 604800 * i;
+    const firstResetTimestamp =
+      dayjs("02/28/2023").startOf("day").add(11, "hour").unix() + 604800 * i;
 
-    // ends 1 week after reset
-    const endTimestamp = resetTimestamp + 604800;
+    // need resetTimestamp as a date
+    const reset = dayjs.unix(firstResetTimestamp).toISOString();
+
+    // ends at next weekly reset
+    const nextReset = dayjs.unix(firstResetTimestamp + 604800).toISOString();
 
     const nightfall = nightfallOrderJson[nightfallIndex];
 
-    if (nightfallIndex === 5) {
+    if (nightfallIndex === nightfallOrderJson.length - 1) {
       nightfallIndex = 0;
     } else {
       nightfallIndex++;
     }
 
-    schedule[resetTimestamp] = {
-      ...nightfall,
-      startsAt: resetTimestamp,
-      endsAt: endTimestamp,
-    };
+    const difficulties = Object.keys(nightfall.difficulties);
+
+    // create a nightfall week for each difficulty
+    difficulties.forEach((difficulty) => {
+      const nightfallWeek: Prisma.NightfallWeekCreateInput = {
+        startsAt: reset,
+        endsAt: nextReset,
+        name: nightfall.name,
+        difficulty,
+        activity: {
+          connect: {
+            hash: nightfall.difficulties[difficulty],
+          },
+        },
+      };
+
+      nightfallWeeks.push(nightfallWeek);
+    });
   }
 
-  fs.writeFileSync(process.cwd() + "/json/nightfallSchedule.json", JSON.stringify(schedule));
+  // create all the nightfall weeks
+  for (const nightfallWeek of nightfallWeeks) {
+    await prisma.nightfallWeek.create({
+      data: nightfallWeek,
+    });
+  }
 
-  res.status(200).send("ok");
+  res.status(200).json({ message: "Nightfall schedule generated", success: true });
 }

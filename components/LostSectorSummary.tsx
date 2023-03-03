@@ -10,38 +10,39 @@ import Link from "next/link";
 import { Tooltip } from "@mui/material";
 
 export default function LostSectorSummary() {
-  const { data: lostSectorData }: { data: LostSectorData; isLoading: boolean } = useSWR(
+  const { data, isLoading }: { data: LostSectorData; isLoading: boolean } = useSWR(
     "/api/lost-sector",
     fetcher
   );
 
+  console.log(data);
+  console.log(isLoading);
+
+  if (isLoading || !data) {
+    return <CardLoading dataName="lost sector" />;
+  }
+
   return (
-    <>
-      {lostSectorData ? (
-        <div
-          className="activity-card"
-          style={{
-            backgroundImage: `url(https://www.bungie.net${lostSectorData.keyArt})`,
-          }}>
-          <div className="activity-card-inner">
-            {" "}
-            <Tooltip title="View details" placement="left" arrow>
-              <Link href="/lost-sector">
-                <div>
-                  <h3>Today&apos;s Lost Sector is</h3>
-                  <h2>{lostSectorData.name}</h2>
-                </div>
-              </Link>
-            </Tooltip>
-            <Rewards rewards={lostSectorData.rewards} />
-            <Shields modifiers={lostSectorData.modifiers} />
-            <Champions modifiers={lostSectorData.modifiers} />
-            <Modifiers modifiers={lostSectorData.modifiers} />
-          </div>
-        </div>
-      ) : (
-        <CardLoading dataName="lost sector" />
-      )}
-    </>
+    <div
+      className="section-card"
+      style={{
+        backgroundImage: `url(https://www.bungie.net${data.activity.pgcrImage})`,
+      }}>
+      <div className="section-card-inner">
+        {" "}
+        <Tooltip title="View details" placement="left" arrow>
+          <Link href="/lost-sector">
+            <div>
+              <h3>Today&apos;s Lost Sector is</h3>
+              <h2>{data.name}</h2>
+            </div>
+          </Link>
+        </Tooltip>
+        <Rewards rewards={data.rewards} />
+        <Shields modifiers={data.activity.modifiers} />
+        <Champions modifiers={data.activity.modifiers} />
+        <Modifiers modifiers={data.activity.modifiers} />
+      </div>
+    </div>
   );
 }

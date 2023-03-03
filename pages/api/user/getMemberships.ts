@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
-    res.status(405).send("Method not allowed");
+    res.status(405).json({ message: "Method not allowed", success: false });
 
     return;
   }
@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { access_token } = req.body;
 
   if (!access_token) {
-    res.status(400).send("Missing access_token");
+    res.status(400).json({ message: "Access token is required", success: false });
 
     return;
   }

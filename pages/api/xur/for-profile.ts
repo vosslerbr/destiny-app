@@ -5,21 +5,21 @@ import itemTypeMap from "@/helpers/itemTypeMap";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
-    res.status(405).send("Method not allowed");
+    res.status(405).json({ message: "Method not allowed", success: false });
 
     return;
   }
 
   // get data from request body
-  const {
-    membershipType,
-    membershipId,
-    access_token,
-    characterId = "2305843009743344696",
-  } = req.body;
+  const { membershipType, membershipId, access_token, characterId } = req.body;
 
-  if (!membershipId) {
-    res.status(400).send("Missing membershipId");
+  const missingMembershipType = membershipType === undefined || membershipType === null; // 0 is a valid membership type
+
+  if (!membershipId || missingMembershipType || !access_token || !characterId) {
+    res.status(400).json({
+      message: "Membership ID, Membership Type, Access Token, and Character Id are all required",
+      success: false,
+    });
     return;
   }
 

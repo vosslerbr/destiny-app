@@ -1,4 +1,9 @@
-import { ItemTypeMap } from "@/global";
+interface ItemTypeMap {
+  [key: number]: {
+    singular: string;
+    plural: string;
+  };
+}
 
 const itemTypeMap: ItemTypeMap = {
   0: { singular: "None", plural: "None" },
@@ -8,14 +13,14 @@ const itemTypeMap: ItemTypeMap = {
   7: { singular: "Message", plural: "Messages" },
   8: { singular: "Engram", plural: "Engrams" },
   9: { singular: "Consumable", plural: "Consumables" },
-  10: { singular: "ExchangeMaterial", plural: "ExchangeMaterials" },
-  11: { singular: "MissionReward", plural: "MissionRewards" },
-  12: { singular: "QuestStep", plural: "QuestSteps" },
-  13: { singular: "QuestStepComplete", plural: "QuestStepCompletes" },
+  10: { singular: "Exchange Material", plural: "Exchange Materials" },
+  11: { singular: "Mission Reward", plural: "Mission Rewards" },
+  12: { singular: "Quest Step", plural: "Quest Steps" },
+  13: { singular: "Quest Step Complete", plural: "Quest Step Completes" },
   14: { singular: "Emblem", plural: "Emblems" },
   15: { singular: "Quest", plural: "Quests" },
   16: { singular: "Subclass", plural: "Subclasses" },
-  17: { singular: "ClanBanner", plural: "ClanBanners" },
+  17: { singular: "Clan Banner", plural: "Clan Banners" },
   18: { singular: "Aura", plural: "Auras" },
   19: { singular: "Mod", plural: "Mods" },
   20: { singular: "Dummy", plural: "Dummies" },
@@ -26,7 +31,7 @@ const itemTypeMap: ItemTypeMap = {
   25: { singular: "Package", plural: "Packages" },
   26: { singular: "Bounty", plural: "Bounties" },
   27: { singular: "Wrapper", plural: "Wrappers" },
-  28: { singular: "SeasonalArtifact", plural: "SeasonalArtifacts" },
+  28: { singular: "Seasonal Artifact", plural: "Seasonal Artifacts" },
   29: { singular: "Finisher", plural: "Finishers" },
   30: { singular: "Pattern", plural: "Patterns" },
 };

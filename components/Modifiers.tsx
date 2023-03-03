@@ -9,7 +9,7 @@ interface LSModifiersProps {
 
 export default function Modifiers({ modifiers, showTitle = true }: LSModifiersProps) {
   return (
-    <div className="modifiers-container activity-metadata">
+    <div className="modifiers-container section-metadata">
       {showTitle && <h4>Modifiers</h4>}
 
       <div>

@@ -6,7 +6,7 @@ import { LinearProgress } from "@mui/material";
 
 export default function CardLoading({ dataName }: { dataName: string }) {
   return (
-    <div className="activity-card">
+    <div className="section-card">
       <div className="loading-container">
         <h2>Loading {dataName}...</h2>
         <LinearProgress />

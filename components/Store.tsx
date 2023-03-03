@@ -1,7 +1,3 @@
-/**
- * @description this is a wrapper component that will be used to store the user data and provide it to the rest of the app
- */
-
 import React, { useState, createContext, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";

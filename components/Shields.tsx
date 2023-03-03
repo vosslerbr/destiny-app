@@ -40,7 +40,7 @@ export default function Shields({ modifiers }: LSModifiersProps) {
   });
 
   return (
-    <div className="shields-container activity-metadata">
+    <div className="shields-container section-metadata">
       <h4>Shields</h4>
       <div>{shields}</div>
     </div>

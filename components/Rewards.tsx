@@ -10,7 +10,7 @@ interface LSRewardsProps {
 
 export default function Rewards({ rewards }: LSRewardsProps) {
   return (
-    <div className="rewards-container activity-metadata">
+    <div className="rewards-container section-metadata">
       <h4>Rewards</h4>
       <div>
         {rewards.map((reward) => {

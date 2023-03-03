@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function XurLegendaryWeapons({ items }: any) {
   return (
-    <div className="rewards-container activity-metadata">
+    <div className="rewards-container section-metadata">
       <h4>Legendary Weapons</h4>
       <div>
         {items
