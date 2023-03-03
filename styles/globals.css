@@ -29,7 +29,7 @@ main {
 /* TODO My styles (move later) */
 
 .section-card,
-.xur-gone-card,
+.out-of-session-card,
 .section-card-detail {
   background: rgb(24, 26, 37);
   padding: 2rem;
@@ -60,7 +60,7 @@ main {
   border-radius: 5px 0 0 5px;
 }
 
-.xur-gone-card {
+.out-of-session-card {
   text-align: center;
 }
 
@@ -75,7 +75,7 @@ h1 {
   margin-bottom: 2rem;
 }
 
-.xur-gone-card h2 {
+.out-of-session-card h2 {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
@@ -86,7 +86,7 @@ h1 {
 }
 
 .section-card h3,
-.xur-gone-card h3 {
+.out-of-session-card h3 {
   font-size: 1rem;
   font-weight: 300;
   opacity: 0.5;

@@ -31,12 +31,12 @@ export default function NightfallSummary() {
               </Link>
             </Tooltip>
             {/* we only need these once, so just grab from master */}
-            <Shields modifiers={nightfallData.difficulties[3].modifiers} />
-            <Champions modifiers={nightfallData.difficulties[3].modifiers} />
+            <Shields modifiers={nightfallData.difficulties[2]?.activity.modifiers || []} />
+            <Champions modifiers={nightfallData.difficulties[2]?.activity.modifiers || []} />
 
-            {nightfallData.difficulties.map((difficulty: any) => {
+            {nightfallData.difficulties.map((difficulty) => {
               return (
-                <div key={difficulty.detailedName}>
+                <div key={difficulty?.activity.detailedName}>
                   <Accordion
                     sx={{
                       backgroundColor: "transparent",
@@ -57,14 +57,17 @@ export default function NightfallSummary() {
                         border: "none",
                         paddingLeft: "0rem",
                       }}>
-                      <Typography>{difficulty.detailedName} Modifiers</Typography>
+                      <Typography>{difficulty?.activity.detailedName} Modifiers</Typography>
                     </AccordionSummary>
                     <AccordionDetails
                       sx={{
                         paddingLeft: "0rem",
                         paddingRight: "0rem",
                       }}>
-                      <Modifiers modifiers={difficulty.modifiers} showTitle={false} />
+                      <Modifiers
+                        modifiers={difficulty?.activity.modifiers || []}
+                        showTitle={false}
+                      />
                     </AccordionDetails>
                   </Accordion>
                 </div>

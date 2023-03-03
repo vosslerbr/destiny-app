@@ -5,6 +5,7 @@ import {
   Collectible,
   InventoryItem,
   LostSectorDay,
+  NightfallWeek,
 } from "@prisma/client";
 
 export interface ClassTypeMap {
@@ -19,16 +20,25 @@ export interface LostSectorData extends LostSectorDay {
 }
 
 export interface NightfallData {
-  name: string | null;
-  keyart: string | null;
-  difficulties: (Activity & {
-    modifiers: (ActivityModifiersOnActivity & {
-      activityModifier: ActivityModifier;
-    })[];
-  })[];
-  grandmaster: Activity & {
-    modifiers: (ActivityModifiersOnActivity & {
-      activityModifier: ActivityModifier;
-    })[];
-  };
+  name: string | null | undefined;
+  keyart: string | null | undefined;
+  difficulties: (
+    | (NightfallWeek & {
+        activity: Activity & {
+          modifiers: (ActivityModifiersOnActivity & {
+            activityModifier: ActivityModifier;
+          })[];
+        };
+      })
+    | undefined
+  )[];
+  grandmaster:
+    | (NightfallWeek & {
+        activity: Activity & {
+          modifiers: (ActivityModifiersOnActivity & {
+            activityModifier: ActivityModifier;
+          })[];
+        };
+      })
+    | undefined;
 }

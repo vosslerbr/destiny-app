@@ -89,7 +89,7 @@ export default function XurSummary() {
   return (
     <>
       {!xurIsHere ? (
-        <div className="xur-gone-card">
+        <div className="out-of-session-card">
           <h2>Xur will be back at {resetTime} on Friday</h2>
           <h3>{xurArrival} from now</h3>
         </div>

@@ -26,6 +26,16 @@ model LostSectorDay {
   rewards Collectible[]
 }
 
+model NightfallWeek {
+  id Int @id @default(autoincrement())
+  name String
+  activity Activity @relation(fields: [activityHash], references: [hash])
+  activityHash Int @db.UnsignedInt
+  startsAt DateTime
+  endsAt DateTime
+  difficulty String
+}
+
 model Activity {
   hash Int @id @db.UnsignedInt
   name String? @db.Text
@@ -36,6 +46,7 @@ model Activity {
   modifiers ActivityModifiersOnActivity[]
   directActivityModeType Int?
   lostSectorDays LostSectorDay[]
+  nightfallWeeks NightfallWeek[]
 }
 
 model ActivityModifier {
@@ -81,6 +92,7 @@ model Collectible {
   inventoryItem InventoryItem @relation(fields: [inventoryItemHash], references: [hash])
   inventoryItemHash Int @db.UnsignedInt
   lostSectorDays LostSectorDay[]
+
 
   @@index([inventoryItemHash, sourceHash], name: "inventoryItemHash_sourceHash")
 }

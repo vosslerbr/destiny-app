@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dayjs from "dayjs";
-import fs from "fs";
 import prisma from "@/lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,101 +9,53 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const nowTimestamp = dayjs().unix();
+  const nowTimestamp = dayjs.unix(dayjs().unix()).toISOString();
 
-  // read the lost sector schedule json file
-  const nightfallSchedule = fs.readFileSync(process.cwd() + "/json/nightfallSchedule.json", "utf8");
+  const nightfalls = await prisma.nightfallWeek.findMany({
+    where: {
+      startsAt: {
+        lte: nowTimestamp,
+      },
+      endsAt: {
+        gte: nowTimestamp,
+      },
+    },
+    include: {
+      activity: {
+        include: {
+          modifiers: {
+            include: {
+              activityModifier: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
-  // TODO types
-  const nightfallScheduleJson: any = JSON.parse(nightfallSchedule);
+  if (!nightfalls.length) {
+    res.status(500).json({ message: "Nightfall data not found", success: false });
 
-  // we need the lost sector where the nowTimestamp is between the startsAt and endsAt
-  const currentNightfall: any = Object.values(nightfallScheduleJson).find(
-    (nightfall: any) => nightfall.startsAt <= nowTimestamp && nightfall.endsAt >= nowTimestamp
+    return;
+  }
+
+  const heroNightfall = nightfalls.find((nightfall) => nightfall.difficulty === "hero");
+
+  const legendNightfall = nightfalls.find((nightfall) => nightfall.difficulty === "legend");
+
+  const masterNightfall = nightfalls.find((nightfall) => nightfall.difficulty === "master");
+
+  const grandmasterNightfall = nightfalls.find(
+    (nightfall) => nightfall.difficulty === "grandmaster"
   );
 
-  if (!currentNightfall) {
-    res.status(500).json({ message: "Nightfall data not found", success: false });
-
-    return;
-  }
-
-  const adeptNightfall = await prisma.activity.findUnique({
-    where: {
-      hash: currentNightfall.difficulties.adept,
-    },
-    include: {
-      modifiers: {
-        include: {
-          activityModifier: true,
-        },
-      },
-    },
-  });
-
-  const heroNightfall = await prisma.activity.findUnique({
-    where: {
-      hash: currentNightfall.difficulties.hero,
-    },
-    include: {
-      modifiers: {
-        include: {
-          activityModifier: true,
-        },
-      },
-    },
-  });
-  const legendNightfall = await prisma.activity.findUnique({
-    where: {
-      hash: currentNightfall.difficulties.legend,
-    },
-    include: {
-      modifiers: {
-        include: {
-          activityModifier: true,
-        },
-      },
-    },
-  });
-  const masterNightfall = await prisma.activity.findUnique({
-    where: {
-      hash: currentNightfall.difficulties.master,
-    },
-    include: {
-      modifiers: {
-        include: {
-          activityModifier: true,
-        },
-      },
-    },
-  });
-  const grandmasterNightfall = await prisma.activity.findUnique({
-    where: {
-      hash: currentNightfall.difficulties.grandmaster,
-    },
-    include: {
-      modifiers: {
-        include: {
-          activityModifier: true,
-        },
-      },
-    },
-  });
-
-  const nightfallActivities = [adeptNightfall, heroNightfall, legendNightfall, masterNightfall];
-
-  const keyart = adeptNightfall?.pgcrImage;
-  const name = adeptNightfall?.description;
-
-  if (!nightfallActivities.length) {
-    res.status(500).json({ message: "Nightfall data not found", success: false });
-    return;
-  }
+  const keyart = heroNightfall?.activity?.pgcrImage;
+  const name = heroNightfall?.activity?.description; // idk why but this is the name
 
   const data = {
     name,
     keyart,
-    difficulties: nightfallActivities,
+    difficulties: [heroNightfall, legendNightfall, masterNightfall],
     grandmaster: grandmasterNightfall,
   };
 
